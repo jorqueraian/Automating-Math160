@@ -160,3 +160,6 @@ cython_debug/
 #.idea/
 config.yaml
 canvas.json
+
+output/
+tempprecalc.pdf
