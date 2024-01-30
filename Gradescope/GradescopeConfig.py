@@ -65,8 +65,8 @@ def get_standard_rubric_key(standard, grade):
 # BIG_LOOK_UP_TABLE made at the top
 ASSIGNMENT_NAME = "Module 2: Quiz"
 
-# Run the file ExportFromGradescope.py! or run this file.
-# everything should work now! good luck!
+# Run the file ExportFromGradescope.py! or run this file. either will work
+# good luck!
 exec(open("Gradescope/ExportFromGradescope.py").read())
 
 # You can upload the output of the file to canvas via tamper monkey

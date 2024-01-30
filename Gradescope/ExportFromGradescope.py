@@ -27,7 +27,7 @@ def add_rubric_scores(grades_and_evals):
         for key in list(student["questions"].keys()):
             if re.match(r"\d{1,2}: \w\d{1,2} .*", key):
                 standard = key.split(" ")[1]  # possible point of failure. need the questions to be labeled in a very specific way!
-                score = RubricScore.NotGradable.value
+                score = default_rubric_eval
                 for rub_score in RubricScore:
                     if try_extract_rubric_score(student["questions"][key]["rubric_items"],standard, rub_score):
                         score = rub_score.value
@@ -42,7 +42,7 @@ def get_gradescope_data_for_versd_assignment(course_num, assignment_nums, canvas
     evals = []
     for assignment_num in assignment_nums:
         evals_ver = gradescope.get_assignment_evaluations(course_num, assignment_num)
-        evals += [eval for eval in evals_ver if eval["Status"] != "Missing"]
+        evals += [eval for eval in evals_ver if eval["Status"] == "Graded"]
     add_rubric_scores(evals)
 
     if canvas_usable and canvas_roster is not None:
