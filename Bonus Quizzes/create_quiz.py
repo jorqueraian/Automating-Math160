@@ -61,7 +61,7 @@ def generate_precalc_form_pdf(student_name, instructor_name, exam_date, exam_len
     else:
         can.drawString(103, 561, r"X")
         can.drawString(150, 548, r"non-graphing")
-    can.drawString(103, 499, r"X")
+    can.drawString(103, 524, r"X")
 
     if sdc_accom.strip().lower() != "nan":
         can.drawString(300, 718, r"Accommodations: ")

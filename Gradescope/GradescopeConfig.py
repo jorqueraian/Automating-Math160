@@ -15,7 +15,10 @@ CANVAS_ROSTER = "canvas_students.csv"
 ### assignment ids also come from url https://www.gradescope.com/courses/703259/assignments/3989512
 BIG_LOOK_UP_TABLE = {
     "Module 1: Quiz": [3952727],
-    "Module 2: Quiz": [3989512, 4009266, 4009270, 4009272]
+    "Module 1: Quiz alts": [4031687],
+    "Module 2: Quiz": [4009270],  # Already published: 3989512, 4009272  # Joel: not used 4009266 
+    "Module 2: Quiz alts": [4031746],
+    "Module 3: Quiz": [5]
 }
 
 ################# THE GRADESCOPE API ##############
@@ -40,7 +43,7 @@ class RubricScore(Enum):
     Satisfactory = "Satisfactory"
     RevisionNeeded = "Minor Revision"
     NotYet = "Not Yet"
-    NotGradable = "Not Gradable"
+    NotGradable = "Not gradable"
 
 default_rubric_eval = RubricScore.NotGradable.value
 
@@ -63,7 +66,7 @@ def get_standard_rubric_key(standard, grade):
 ###################### RUNNING THIS SCRIPT #################
 # Assignment Name to get evals for. This should match the name in
 # BIG_LOOK_UP_TABLE made at the top
-ASSIGNMENT_NAME = "Module 2: Quiz"
+ASSIGNMENT_NAME = "Module 2: Quiz alts"
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!

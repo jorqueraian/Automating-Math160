@@ -41,7 +41,7 @@ def generate_precalc_form(student_name, instructor_name, exam_date, exam_len, ca
     else:
         can.drawString(103, 561, r"X")
         can.drawString(150, 548, r"non-graphing")
-    can.drawString(103, 499, r"X")
+    can.drawString(103, 524, r"X")
 
     if sdc_accom.strip().lower() != "nan":
         can.drawString(300, 718, r"Accommodations: ")
@@ -119,14 +119,15 @@ def get_makeup_files_to_print(csvfile, match_threshold=None):
         else:
             return None, None
     
-    makeups_df = pd.read_excel(open(csvfile, 'rb'), sheet_name='Sheet1', skiprows=[0,1])
+    # TODO: read this https://stackoverflow.com/questions/26521266/using-pandas-to-pd-read-excel-for-multiple-worksheets-of-the-same-workbook
+    makeups_df = pd.read_excel(open(csvfile, 'rb'), sheet_name='Unit1', skiprows=[0,1])
     makeups_to_print = makeups_df[makeups_df["Printed"] != True]
     
     for ind in makeups_to_print.index:
         precalc_form = generate_precalc_form(makeups_to_print["Student Name"][ind],
                               makeups_to_print["Instructor Name"][ind],
                               get_date_interval(makeups_to_print["Date"][ind]), makeups_to_print["Time limit"][ind],
-                              parse_calculator(makeups_to_print["Calculator"][ind]), str(makeups_to_print["Accommodations"][ind]))
+                              parse_calculator(makeups_to_print["Calculator"][ind]), "nan")
         makeup_quiz, quiz_name = parse_quiz(makeups_to_print["Quiz"][ind])
         
         if makeup_quiz is None:
