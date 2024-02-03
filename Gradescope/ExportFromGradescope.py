@@ -12,10 +12,18 @@ import pandas as pd
 
 def try_extract_rubric_score(rubric_items, standard, grade):
     # super sloppy fix but for now its fine
+    # add in some miss-spelling catchers. Like gradeable instead of gradable etc
     try:
         return rubric_items[get_standard_rubric_key(standard, grade)]
     except KeyError:
-        return rubric_items[get_standard_rubric_key_old(standard, grade)]
+        try: # try some spelling errors
+            return rubric_items[get_standard_rubric_key(standard, grade.replace("radable", "radeable"))]
+        except KeyError: # this should never occur but just in case
+            try:
+                return rubric_items[get_standard_rubric_key_old(standard, grade)]
+            except KeyError:
+                raise KeyError(f"Failed in 'try_extract_rubric_score'\nFailed to get gradescope score for standard '{standard}' and score '{grade}'. Please check spelling and formatting in gradescope!")
+
 
 def get_standard_rubric_key_old(standard, grade): # possible point of failure. need the rubrics to be labeled in a very specific way!
     return f"**{standard}**: Rubric Score: {RubricScoreMod1[grade.name].value}"
@@ -25,9 +33,13 @@ def add_rubric_scores(grades_and_evals):
     for student in grades_and_evals:
         student["rubric score"] = {}  # add new dictionary key for scores
         for key in list(student["questions"].keys()):
-            if re.match(r"\d{1,2}: \w\d{1,2} .*", key):
+            # Im doing this dumb. Ill outline a better way to do this
+            # for each question check the keys and see if "L? Rubric Score" exists and if so
+            # us that to determine the standard. This will help limit the way the gradescope outline is created
+            # and only require correct formatting in the "L? Rubric Score" group
+            if re.match(r"\d{1,2}\.?\d?: \w\d{1,2} .*", key):
                 standard = key.split(" ")[1]  # possible point of failure. need the questions to be labeled in a very specific way!
-                score = default_rubric_eval
+                score = default_rubric_eval  # think about changing this. Its very bad if this is used
                 for rub_score in RubricScore:
                     if try_extract_rubric_score(student["questions"][key]["rubric_items"],standard, rub_score):
                         score = rub_score.value
@@ -38,10 +50,14 @@ def save_assignment_to_csv(assignment_name, canvas_df):
     canvas_df.to_csv(f"{assignment_name.replace(':', '').replace(' ', '-')}-results.csv", index=False)
 
 
-def get_gradescope_data_for_versd_assignment(course_num, assignment_nums, canvas_usable=True, canvas_roster=None):
+def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, sections_keys=[], canvas_usable=True, canvas_roster=None):
     evals = []
-    for assignment_num in assignment_nums:
-        evals_ver = gradescope.get_assignment_evaluations(course_num, assignment_num)
+    
+    if len(sections_keys) == 0:
+        sections_keys = list(assignment_nums_dict.keys())
+
+    for assignment_num_key in sections_keys:
+        evals_ver = gradescope.get_assignment_evaluations(course_num, assignment_nums_dict[assignment_num_key])
         evals += [eval for eval in evals_ver if eval["Status"] == "Graded"]
     add_rubric_scores(evals)
 
@@ -90,6 +106,6 @@ def get_gradescope_data_for_assignment(course_num, assignment_num, canvas_usable
 
 
 evals = get_gradescope_data_for_versd_assignment(GRADESCOPE_COURSE_NUMBER, 
-                                                BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME], 
+                                                BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME], SECTIONS, 
                                                 True, CANVAS_ROSTER)
 save_assignment_to_csv(ASSIGNMENT_NAME, evals)

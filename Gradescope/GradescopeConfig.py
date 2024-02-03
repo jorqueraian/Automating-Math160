@@ -14,11 +14,11 @@ CANVAS_ROSTER = "canvas_students.csv"
 ####    "Name of assignment" : [assignment ids for each version]
 ### assignment ids also come from url https://www.gradescope.com/courses/703259/assignments/3989512
 BIG_LOOK_UP_TABLE = {
-    "Module 1: Quiz": [3952727],
-    "Module 1: Quiz alts": [4031687],
-    "Module 2: Quiz": [4009270],  # Already published: 3989512, 4009272  # Joel: not used 4009266 
-    "Module 2: Quiz alts": [4031746],
-    "Module 3: Quiz": [5]
+    "Module 1: Quiz": {"all": 3952727},
+    "Module 1: Quiz alts": {"alts": 4031687},
+    "Module 2: Quiz": {"idk": 4009270},  # Already published: 3989512, 4009272  # Joel: not used 4009266 
+    "Module 2: Quiz alts": {"alts": 4031746},
+    "Module 3: Quiz": {"001":4025219, "003":4025034, "004": 4025220, "005":4025222, "008":4025234, "009":4025236, "006":4025276}
 }
 
 ################# THE GRADESCOPE API ##############
@@ -66,11 +66,14 @@ def get_standard_rubric_key(standard, grade):
 ###################### RUNNING THIS SCRIPT #################
 # Assignment Name to get evals for. This should match the name in
 # BIG_LOOK_UP_TABLE made at the top
-ASSIGNMENT_NAME = "Module 2: Quiz alts"
+ASSIGNMENT_NAME = "Module 3: Quiz"
+# leave empty to do all sections, or ["001"] do only do section 001
+SECTIONS = ["003"]
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!
-exec(open("Gradescope/ExportFromGradescope.py").read())
+if __name__ == '__main__': 
+    exec(open("Gradescope/ExportFromGradescope.py").read())
 
 # You can upload the output of the file to canvas via tamper monkey
 # check out the following:
