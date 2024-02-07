@@ -57,8 +57,8 @@ class RubricScoreMod1(Enum):
 # Change depending on how the gradescope rubric is set up
 # currently this is looking for a rubric group called "L2 Rubric Score"
 # with the options according to RubricScore
-def get_standard_rubric_key(standard, grade):
-    return f"{standard} Rubric Score: {grade.value}"
+def get_standard_rubric_key(standard="", grade=None):
+    return f"{standard} Rubric Score: {"" if grade is None else grade.value}"
 
 
 
@@ -68,7 +68,7 @@ def get_standard_rubric_key(standard, grade):
 # BIG_LOOK_UP_TABLE made at the top
 ASSIGNMENT_NAME = "Module 3: Quiz"
 # leave empty to do all sections, or ["001"] do only do section 001
-SECTIONS = ["006"]
+SECTIONS = []
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!

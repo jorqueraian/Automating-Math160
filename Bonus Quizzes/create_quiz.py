@@ -36,7 +36,7 @@ def create_problems_include(standards: list[str]):
 
 def generate_cover_page_include(standards: list[str]):
     def get_row(standard):
-        return f"{standard}: {std_text[standard]} & Q\\ref{{std:{standard}}} & E M P NG"
+        return f"{standard}: {std_text[standard]} & Q\\ref{{std:{standard}}} & S MN NY NG"
     
     with open("standards.csv", "r") as f:
         std_text = {std[0]:std[1] for std in csv.reader(f, delimiter=",")}
@@ -155,25 +155,27 @@ def generate_student_quizzes_tex(quizzes_csv, clean_up=True, precalc_sections=[]
 #### STEP 0.5 ####
 # Modify standards.csv to change teh description of standards. And check it has what you need
 # Quiz Title: Math 160, QUIZ_TITLE
-QUIZ_TITLE = r"Mod 15 Bonus Assessment Fall 2023"
+QUIZ_TITLE = r"Mod 7 Bonus Assessment Spring 2024"
 # You can also change the location of the problem bank and the output destination here
 PROBLEM_BANK = "problembank/FA23/"
 OUTPUT_DIR = "output/"
 
-#### STEP 1 (Optional) ####
+#### STEP 1 (Optional ish) ####
 # Create a file named students.csv in the same directory as this file
 # This file should have no header
 # and each row should be as follows. (With no spaces after the ,)
     # Student Name,Section,Standard1,Standard2,.....
 
 #### Step 1.5 ####
-# If some of the section you are generating quiz for need to have a pre-calc form attached
+# If some of the sections you are generating quiz for need to have a pre-calc form 
+# attached
 # Add a tuple for each section into the array. 
-# Ex ("010", "Ross Flaxman", r"12/8", "50 min")
+# Ex ("<Section number ex 006>", "Ross Flaxman", r"12/8", "50 min")
 precalc_forms=[("006", "Ross Flaxman", r"whenever", "50 min")]
 
 #### Step 2 ####
-# Run the File with the following command (Note this was written in python 3.11 so you may need to updated to at least that version)
+# Run this file with the following command or click "play" is VS code
+# (Note this was written in python 3.11 so you may need to updated to at least that version)
     # Python create_quiz.py
 # Or if you did not rename your csv file as in step 1 you can run
     # Python create_quiz.py your_csv_file.csv
