@@ -68,7 +68,7 @@ def get_standard_rubric_key(standard, grade):
 # BIG_LOOK_UP_TABLE made at the top
 ASSIGNMENT_NAME = "Module 3: Quiz"
 # leave empty to do all sections, or ["001"] do only do section 001
-SECTIONS = ["003"]
+SECTIONS = ["006"]
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!
