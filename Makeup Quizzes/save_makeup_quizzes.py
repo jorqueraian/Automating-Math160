@@ -22,7 +22,8 @@ MAKEUP_QUIZ_EXCEL = r"C:\Users\jorqu\OneDrive - Colostate\160SP24\SharedMeetings
 QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizDALT.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 2 Continuity Limits\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf"
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\zzzDrafts\Mod4Exam\Mod4ExamVersionAlt.pdf"
 ]
 
 
@@ -100,7 +101,7 @@ def get_makeup_files_to_print(csvfile, match_threshold=None):
             # Remove .pdf or what ever
             # Make lowercase and remove whitespace
             # remove _ or -
-            return re.sub('^\d+', '', str(input_str).split('\\')[path_ind].split('.')[0].lower()).strip().replace('_', '').replace('-', '').replace(',', '').replace(' ', '').replace("quizzes","quiz").replace("module","mod")
+            return re.sub(r'^\d+', '', str(input_str).split('\\')[path_ind].split('.')[0].lower()).strip().replace('_', '').replace('-', '').replace(',', '').replace(' ', '').replace("quizzes","quiz").replace("module","mod")
         # This is over kill and entirely unneeded. Its also so funny that the clean_quiz function will probably make it so there is a perfect matching every time! and the string alignment is 1000% overkill. But at this point im keeping it as is
         quizfile_names = [clean_str(qfile, -2) for qfile in QUIZZES_LOCATIONS]
         best_match = None

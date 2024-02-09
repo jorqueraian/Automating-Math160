@@ -18,7 +18,9 @@ BIG_LOOK_UP_TABLE = {
     "Module 1: Quiz alts": {"alts": 4031687},
     "Module 2: Quiz": {"idk": 4009270},  # Already published: 3989512, 4009272  # Joel: not used 4009266 
     "Module 2: Quiz alts": {"alts": 4031746},
-    "Module 3: Quiz": {"001":4025219, "003":4025034, "004": 4025220, "005":4025222, "008":4025234, "009":4025236, "006":4025276}
+    "Module 3: Quiz": {"001":4025219, "003":4025034, "004": 4025220, "005":4025222, "008":4025234, "009":4025236, "006":4025276},
+    "Module 4: Exam": {"all": 4065801, "alts": 0}
+
 }
 
 ################# THE GRADESCOPE API ##############
@@ -66,9 +68,9 @@ def get_standard_rubric_key(standard="", grade=None):
 ###################### RUNNING THIS SCRIPT #################
 # Assignment Name to get evals for. This should match the name in
 # BIG_LOOK_UP_TABLE made at the top
-ASSIGNMENT_NAME = "Module 3: Quiz"
+ASSIGNMENT_NAME = "Module 4: Exam"
 # leave empty to do all sections, or ["001"] do only do section 001
-SECTIONS = []
+SECTIONS = ["all"]
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!

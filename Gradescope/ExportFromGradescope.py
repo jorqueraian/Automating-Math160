@@ -59,10 +59,14 @@ def add_rubric_scores(grades_and_evals):
             stds = list(set(stds))
 
             for standard in stds:
+                rubric_with_data =0
                 score = default_rubric_eval  # think about changing this. Its very bad if this is used
                 for rub_score in RubricScore:
                     if try_extract_rubric_score(student["questions"][key]["rubric_items"],standard, rub_score):
                         score = rub_score.value
+                        rubric_with_data += 1
+                if rubric_with_data != 1:
+                    print(f"Student: {student['First Name']+ ' '+ student['Last Name']}, Standard:{standard} has {rubric_with_data} rubric scores selected")
                 student["rubric score"][standard] = score.split(" (")[0]  # can do just score.
 
 
