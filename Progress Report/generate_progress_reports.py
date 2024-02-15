@@ -49,7 +49,7 @@ def read_n_combine(rubrics_dir):
 def save_assignment_to_csv(canvas_df):
     from datetime import date
     today = date.today()
-    canvas_df.to_csv(f"Grade Report-{today.strftime('%m-%d')}.csv", index=False)
+    canvas_df.to_csv(f"{OUTPUT_DIR}Grade Report-{today.strftime('%m-%d')}.csv", index=False)
 
 
 

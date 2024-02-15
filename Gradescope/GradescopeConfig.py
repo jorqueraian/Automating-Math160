@@ -1,6 +1,11 @@
 # EVERYTHING HERE CAN BE CHANGED, JUST READ THE DESCRIPTION BEFORE DOING SO
 # GO TO THE BOTTOM WHEN RUNNING THIS SCRIPT
 
+import os
+os.chdir(os.path.dirname(__file__))
+
+OUTPUT_DIR = "output/"
+
 ############# GRADESCOPE COURSE NUMBER #############
 # This comes from the url https://www.gradescope.com/courses/703259
 GRADESCOPE_COURSE_NUMBER = 703259
@@ -75,7 +80,7 @@ SECTIONS = []
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!
 if __name__ == '__main__': 
-    exec(open("Gradescope/ExportFromGradescope.py").read())
+    exec(open("ExportFromGradescope.py").read())
 
 # You can upload the output of the file to canvas via tamper monkey
 # check out the following:

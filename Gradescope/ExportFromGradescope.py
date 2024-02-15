@@ -9,6 +9,12 @@
 from GradescopeConfig import *
 import re
 import pandas as pd
+import os
+
+os.chdir(os.path.dirname(__file__))
+
+OUTPUT_DIR = "output/"
+
 
 def try_extract_rubric_score(rubric_items, standard, grade):
     # super sloppy fix but for now its fine
@@ -76,7 +82,7 @@ def add_rubric_scores(grades_and_evals):
 def save_assignment_to_csv(assignment_name, canvas_df):
     from datetime import date
     today = date.today()
-    canvas_df.to_csv(f"{assignment_name.replace(':', '').replace(' ', '-')}-results-{today.strftime('%m-%d')}.csv", index=False)
+    canvas_df.to_csv(f"{OUTPUT_DIR}{assignment_name.replace(':', '').replace(' ', '-')}-results-{today.strftime('%m-%d')}.csv", index=False)
 
 
 def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, sections_keys=[], canvas_usable=True, canvas_roster=None):
