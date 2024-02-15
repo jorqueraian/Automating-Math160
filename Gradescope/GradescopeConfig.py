@@ -19,7 +19,7 @@ BIG_LOOK_UP_TABLE = {
     "Module 2: Quiz": {"idk": 4009270},  # Already published: 3989512, 4009272  # Joel: not used 4009266 
     "Module 2: Quiz alts": {"alts": 4031746},
     "Module 3: Quiz": {"001":4025219, "003":4025034, "004": 4025220, "005":4025222, "008":4025234, "009":4025236, "006":4025276},
-    "Module 4: Exam": {"all": 4065801, "alts": 0}
+    "Module 4: Exam": {"all": 4065801, "sdc": 4082832, "alts": 4075164}
 
 }
 
@@ -60,7 +60,7 @@ class RubricScoreMod1(Enum):
 # currently this is looking for a rubric group called "L2 Rubric Score"
 # with the options according to RubricScore
 def get_standard_rubric_key(standard="", grade=None):
-    return f"{standard} Rubric Score: {"" if grade is None else grade.value}"
+    return f"{standard} Rubric Score: {"" if grade is None else grade}"
 
 
 
@@ -70,7 +70,7 @@ def get_standard_rubric_key(standard="", grade=None):
 # BIG_LOOK_UP_TABLE made at the top
 ASSIGNMENT_NAME = "Module 4: Exam"
 # leave empty to do all sections, or ["001"] do only do section 001
-SECTIONS = ["all"]
+SECTIONS = []
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!

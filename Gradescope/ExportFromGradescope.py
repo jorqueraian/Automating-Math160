@@ -14,15 +14,18 @@ def try_extract_rubric_score(rubric_items, standard, grade):
     # super sloppy fix but for now its fine
     # add in some miss-spelling catchers. Like gradeable instead of gradable etc
     try:
-        return rubric_items[get_standard_rubric_key(standard, grade)]
+        return rubric_items[get_standard_rubric_key(standard, grade.value)]
     except KeyError:
         try: # try some spelling errors
-            return rubric_items[get_standard_rubric_key(standard, grade.replace("radable", "radeable"))]
+            return rubric_items[get_standard_rubric_key(standard, grade.value.replace("radable", "radeable"))]
         except KeyError: # this should never occur but just in case
-            try:
-                return rubric_items[get_standard_rubric_key_old(standard, grade)]
+            try: # try some spelling errors
+                return rubric_items[get_standard_rubric_key(standard, grade.value.replace("grad", "Grad"))]
             except KeyError:
-                raise KeyError(f"Failed in 'try_extract_rubric_score'\nFailed to get gradescope score for standard '{standard}' and score '{grade}'. Please check spelling and formatting in gradescope!")
+                try:
+                    return rubric_items[get_standard_rubric_key_old(standard, grade)]
+                except KeyError:
+                    raise KeyError(f"Failed in 'try_extract_rubric_score'\nFailed to get gradescope score for standard '{standard}' and score '{grade}'. Please check spelling and formatting in gradescope!")
 
 
 # DO NOT USE
@@ -66,12 +69,14 @@ def add_rubric_scores(grades_and_evals):
                         score = rub_score.value
                         rubric_with_data += 1
                 if rubric_with_data != 1:
-                    print(f"Student: {student['First Name']+ ' '+ student['Last Name']}, Standard:{standard} has {rubric_with_data} rubric scores selected")
+                    print(f"Student: {student['First Name']+ ' '+ student['Last Name']}(Section: {student['Sections'].split('-')[-1]}), Standard:{standard} has {rubric_with_data} rubric scores selected")
                 student["rubric score"][standard] = score.split(" (")[0]  # can do just score.
 
 
 def save_assignment_to_csv(assignment_name, canvas_df):
-    canvas_df.to_csv(f"{assignment_name.replace(':', '').replace(' ', '-')}-results.csv", index=False)
+    from datetime import date
+    today = date.today()
+    canvas_df.to_csv(f"{assignment_name.replace(':', '').replace(' ', '-')}-results-{today.strftime('%m-%d')}.csv", index=False)
 
 
 def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, sections_keys=[], canvas_usable=True, canvas_roster=None):

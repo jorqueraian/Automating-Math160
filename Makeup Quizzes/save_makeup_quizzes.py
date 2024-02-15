@@ -13,6 +13,7 @@ from StringSimilarity import cost_of_alignment
 
 
 MAKEUP_QUIZ_EXCEL = r"C:\Users\jorqu\OneDrive - Colostate\160SP24\SharedMeetingsUploads\Makeup-Quizzes.xlsx" 
+MAKEUP_QUIZ_EXCEL_SHEET = r"Unit1"
 #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Makeup-Quizzes.xlsx"
 
 
@@ -23,7 +24,7 @@ QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizDALT.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 2 Continuity Limits\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\zzzDrafts\Mod4Exam\Mod4ExamVersionAlt.pdf"
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf"
 ]
 
 
@@ -70,7 +71,7 @@ def generate_precalc_form(student_name, instructor_name, exam_date, exam_len, ca
     return "tempprecalc.pdf"
 
 
-def get_makeup_files_to_print(csvfile, match_threshold=None):
+def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None):
     def get_date_interval(date_input=""):
         from datetime import date, timedelta
         date_given = pd.to_datetime(str(date_input).replace(',', ' '), errors='coerce')
@@ -121,7 +122,7 @@ def get_makeup_files_to_print(csvfile, match_threshold=None):
             return None, None
     
     # TODO: read this https://stackoverflow.com/questions/26521266/using-pandas-to-pd-read-excel-for-multiple-worksheets-of-the-same-workbook
-    makeups_df = pd.read_excel(open(csvfile, 'rb'), sheet_name='Unit1', skiprows=[0,1])
+    makeups_df = pd.read_excel(open(excelfile, 'rb'), sheet_name=excel_sheet_name, skiprows=[0,1])
     makeups_to_print = makeups_df[makeups_df["Printed"] != True]
     
     for ind in makeups_to_print.index:
@@ -150,4 +151,4 @@ def get_makeup_files_to_print(csvfile, match_threshold=None):
 
 
 # for some reason if the makeup quizzes file is open when you run this things wont work. I have literally no idea why
-get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, match_threshold=0.025)
+get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEET, match_threshold=0.025)
