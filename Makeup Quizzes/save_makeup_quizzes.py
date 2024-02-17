@@ -13,7 +13,7 @@ from StringSimilarity import cost_of_alignment
 
 
 MAKEUP_QUIZ_EXCEL = r"C:\Users\jorqu\OneDrive - Colostate\160SP24\SharedMeetingsUploads\Makeup-Quizzes.xlsx" 
-MAKEUP_QUIZ_EXCEL_SHEET = r"Unit1"
+MAKEUP_QUIZ_EXCEL_SHEET = r"Unit2"
 #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Makeup-Quizzes.xlsx"
 
 
@@ -24,7 +24,8 @@ QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizDALT.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 2 Continuity Limits\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf"
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf"
 ]
 
 
@@ -35,7 +36,7 @@ def generate_precalc_form(student_name, instructor_name, exam_date, exam_len, ca
     can.drawString(100, 698, instructor_name)
     can.drawString(90, 678, "Math 160")
     can.drawString(115, 658, exam_date)
-    can.drawString(110, 638, exam_len)
+    can.drawString(110, 638, str(exam_len))  # This broke once when i didnt have the str and i could never really figure out why
     if calculator_option == "Graphing":
         can.drawString(103, 561, r"X")
     elif calculator_option == "None":

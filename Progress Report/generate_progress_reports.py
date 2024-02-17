@@ -2,15 +2,25 @@ import os
 import pandas as pd
 import re
 import glob
+import math
 os.chdir(os.path.dirname(__file__))
 
 OUTPUT_DIR = "output/"
 
 # maybe make dict to have number of times needed to get mastery
-STANDARDS = ["T1","T2",
-             "L1","L2","L3","L4","L5","L6","L7",
-             "D1","D2","D3","D4","D5","D6","D7","D8","D9","D10","D11",
-             "I1","I2"]
+STANDARDS_dict = {"T1":3,"T2":3,
+             "L1":3,"L2":2,"L3":3,"L4":3,"L5":3,"L6":2,"L7":2,
+             "D1":2,"D2":2,"D3":3,"D4":3,"D5":2,"D6":2,"D7":3,"D8":3,"D9":3,"D10":2,"D11":3,
+             "I1":2,"I2":2,"I3":2,"I4":2,"I5":2}
+
+from enum import Enum
+class RubricScore(Enum):
+    Satisfactory = "Satisfactory"
+    RevisionNeeded = "Minor Revision"
+    NotYet = "Not Yet"
+    NotGradable = "Not gradable"
+
+STANDARDS = list(STANDARDS_dict.keys())
 
 
 def read_n_combine(rubrics_dir):
@@ -31,7 +41,7 @@ def read_n_combine(rubrics_dir):
             for standard_key in stds_assessed:
                 standard = standard_key.split(": ")[-1]
                 # idk do a check with posted score or something
-                if posted_score == 1 and row[standard_key] == float("nan"):
+                if posted_score == 1 and row[standard_key] not in [rub_score.value for rub_score in RubricScore]:
                     print(f'Student: {row["Student Name"]} received no rubric score on {standard} in {r}. But their posted score is 1 (Complete)!')
                 if row[standard_key] == "Satisfactory":
                     combined_dict[(row["Student Name"], int(row["Student ID"]))][standard] += 1
@@ -46,14 +56,29 @@ def read_n_combine(rubrics_dir):
     return the_dframe
 
 
-def save_assignment_to_csv(canvas_df):
+def from_combine_get_completed_stds(combined_df):
+    totals_arr = []
+    for _, row in combined_df.iterrows():
+        completed_stds = [row["Student Name"], row["Student ID"]]+[0]*len(STANDARDS)
+        for ind, standard in enumerate(STANDARDS):
+            if row[standard] >= STANDARDS_dict[standard]:
+                completed_stds[ind+2] = 1
+            else:
+                completed_stds[ind+2] = 0
+        totals_arr.append(completed_stds)
+    the_dframe = pd.DataFrame(totals_arr, columns=["Student Name", "Student ID"]+STANDARDS)
+    return the_dframe
+            
+
+def save_assignment_to_csv(canvas_df, save_name="Grade Report"):
     from datetime import date
     today = date.today()
-    canvas_df.to_csv(f"{OUTPUT_DIR}Grade Report-{today.strftime('%m-%d')}.csv", index=False)
+    canvas_df.to_csv(f"{OUTPUT_DIR}{save_name}-{today.strftime('%m-%d')}.csv", index=False)
 
 
 
-#print("Nothing")
-#onlyfiles = [f for f in os.listdir("Rubric Scores") if os.path.isfile("".join(["Rubric Scores", f]))]
 combined_scores = read_n_combine("Rubric Scores")
 save_assignment_to_csv(combined_scores)
+totals = from_combine_get_completed_stds(combined_scores)
+save_assignment_to_csv(totals,"Completed Standards")
+print("Done!")

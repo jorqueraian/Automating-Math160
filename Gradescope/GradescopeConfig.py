@@ -12,8 +12,8 @@ GRADESCOPE_COURSE_NUMBER = 703259
 
 ############ CANVAS ROSTER #####################
 # export directly from canvas and save the csv in this file system
-# you may need to add Gradescope/ in font of the name if you put it in the gradescope folder
-CANVAS_ROSTER = "canvas_students.csv"
+# This file is intended to be in the parent directoyy not in the gradescope folder
+CANVAS_ROSTER = "../canvas_students.csv"
 
 ############## PUT ASSIGNMENT NUMBERS HERE AS FOLLOWS #############
 ####    "Name of assignment" : [assignment ids for each version]
@@ -21,11 +21,11 @@ CANVAS_ROSTER = "canvas_students.csv"
 BIG_LOOK_UP_TABLE = {
     "Module 1: Quiz": {"all": 3952727},
     "Module 1: Quiz alts": {"alts": 4031687},
-    "Module 2: Quiz": {"idk": 4009270},  # Already published: 3989512, 4009272  # Joel: not used 4009266 
+    "Module 2: Quiz": {"idk": 4009270, "alts":4031746},  # Already published: 3989512, 4009272  # Joel: not used 4009266 
     "Module 2: Quiz alts": {"alts": 4031746},
     "Module 3: Quiz": {"001":4025219, "003":4025034, "004": 4025220, "005":4025222, "008":4025234, "009":4025236, "006":4025276},
-    "Module 4: Exam": {"all": 4065801, "sdc": 4082832, "alts": 4075164}
-
+    "Module 4: Exam": {"all": 4065801, "sdc": 4082832, "alts": 4075164},
+    "Module 5: Quiz": {"001": 4111118, "003":4111017, "004":4111120, "005":4111123, "006":4111125, "008":4111128, "009":4111130, "alts":4111131}
 }
 
 ################# THE GRADESCOPE API ##############
@@ -73,9 +73,9 @@ def get_standard_rubric_key(standard="", grade=None):
 ###################### RUNNING THIS SCRIPT #################
 # Assignment Name to get evals for. This should match the name in
 # BIG_LOOK_UP_TABLE made at the top
-ASSIGNMENT_NAME = "Module 4: Exam"
+ASSIGNMENT_NAME = "Module 2: Quiz"
 # leave empty to do all sections, or ["001"] do only do section 001
-SECTIONS = []
+SECTIONS = ["alts"]
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!
