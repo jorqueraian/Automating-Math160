@@ -97,8 +97,8 @@ def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, s
     add_rubric_scores(evals)
 
     if canvas_usable and canvas_roster is not None:
-        canvas_df = pd.read_csv(open(canvas_roster, 'rb'), usecols=["Full name", "SIS Id"])
-        canvas_id_dict = {row["SIS Id"]: row["Full name"] for _, row in canvas_df.iterrows()}
+        canvas_df = pd.read_csv(open(canvas_roster, 'rb'), usecols=["Student Name", "Student SIS ID"])
+        canvas_id_dict = {row["Student SIS ID"]: row["Student Name"] for _, row in canvas_df.iterrows()}
         assignment_stds = list(evals[ 0]["rubric score"].keys())
         columns = ["Student Name", "Student ID"] + [f"Rating: {standard}" for standard in assignment_stds]
 
@@ -121,8 +121,8 @@ def get_gradescope_data_for_assignment(course_num, assignment_num, canvas_usable
     evals = [eval for eval in evals if eval["Status"] != "Missing"]
     add_rubric_scores(evals)
     if canvas_usable and canvas_roster is not None:
-        canvas_df = pd.read_csv(open(canvas_roster, 'rb'), usecols=["Full name", "SIS Id"])
-        canvas_id_dict = {row["SIS Id"]: row["Full name"] for _, row in canvas_df.iterrows()}
+        canvas_df = pd.read_csv(open(canvas_roster, 'rb'), usecols=["Student Name", "Student SIS ID"])
+        canvas_id_dict = {row["Student SIS ID"]: row["Student Name"] for _, row in canvas_df.iterrows()}
         assignment_stds = list(evals[0]["rubric score"].keys())
         columns = ["Student Name", "Student ID"] + [f"Rating: {standard}" for standard in assignment_stds]
 

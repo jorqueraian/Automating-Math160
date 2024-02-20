@@ -13,7 +13,7 @@ GRADESCOPE_COURSE_NUMBER = 703259
 ############ CANVAS ROSTER #####################
 # export directly from canvas and save the csv in this file system
 # This file is intended to be in the parent directoyy not in the gradescope folder
-CANVAS_ROSTER = "../canvas_students.csv"
+CANVAS_ROSTER = "../canvas_roster.csv"
 
 ############## PUT ASSIGNMENT NUMBERS HERE AS FOLLOWS #############
 ####    "Name of assignment" : [assignment ids for each version]
@@ -73,9 +73,9 @@ def get_standard_rubric_key(standard="", grade=None):
 ###################### RUNNING THIS SCRIPT #################
 # Assignment Name to get evals for. This should match the name in
 # BIG_LOOK_UP_TABLE made at the top
-ASSIGNMENT_NAME = "Module 2: Quiz"
+ASSIGNMENT_NAME = "Module 5: Quiz"
 # leave empty to do all sections, or ["001"] do only do section 001
-SECTIONS = ["alts"]
+SECTIONS = ["003","006"]  # need to rerun when ross and hilary are done
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!
