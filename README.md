@@ -20,7 +20,7 @@ Making things ffaster!
 5) Open `create_quiz.py` and update all variable in the bottom of the file and then run the file
 
 ## Gradescope to Canvas How to
-1) There is a lot of points of failure in these scripts. So before running update all necessary files: re-download `canvas_students.csv` from canvas (For the time being this file should be saved in the parent directory), re-sync Canvas roster on Gradescope. Update `config.yaml` (DO NOT COMMIT THIS UPDATED FILE TO GITHIB) and this file should be saved in the `Gradescope` directory.
+1) There is a lot of points of failure in these scripts. So before running update all necessary files: re-download `canvas_roster.csv` from [canvas](https://teacherscollege.screenstepslive.com/a/1286286-download-a-student-roster-in-canvas) (For the time being this file should be saved in the parent directory), re-sync Canvas roster on Gradescope. Update `config.yaml` (DO NOT COMMIT THIS UPDATED FILE TO GITHIB) and this file should be saved in the `Gradescope` directory.
 2) Fill out the `GradescopeConfig.py` file. This should also walk you through all other set up instructions.
 3) You can run either the `GradescopeConfig.py` or the `ExportFromGradescope.py` files. The script may give outputs relating to mistake in the rubric scores.
 4) output files will be save in the specified output directory, defaults to `Gradescope/output/`
@@ -33,6 +33,7 @@ Making things ffaster!
 
 ## Progress Report
 1) Export rubric scores from canvas using Tamper Monkey for each assignment you wish to be included, and put these in `Progress Report/Rubric Scores` directory.
-2) Update the `STANDARDS_dict` variable as needed in the `generate_progress_reports.py` file.
-3) run file
+2) (Re-)download `canvas_roster.csv` from [canvas](https://teacherscollege.screenstepslive.com/a/1286286-download-a-student-roster-in-canvas) (For the time being this file should be saved in the parent directory)
+3) Update the `STANDARDS_dict` variable as needed in the `generate_progress_reports.py` file.
+4) run file
 
