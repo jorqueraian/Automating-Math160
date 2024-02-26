@@ -147,7 +147,7 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
             sys.path.insert(-1, r'../Bonus Quizzes')
             import create_quiz
             sys.path.remove(r'../Bonus Quizzes')
-            section_dir = str(makeups_to_print["Section"][ind]) if str(makeups_to_print["Section"][ind])[0:2] == "00" else "00" + str(makeups_to_print["Section"][ind])
+            section_dir = "0"*(max(0,3-len(str(makeups_to_print["Section"][ind])))) + str(makeups_to_print["Section"][ind])
             how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], section_dir, [])
             makeup_quiz = f"{makeup_quiz}/{section_dir}/{how_to_not_code.file_name('pdf')}"
             if not os.path.isfile(makeup_quiz):
