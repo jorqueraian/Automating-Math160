@@ -6,7 +6,6 @@ from PyPDF2 import PdfWriter, PdfReader, PdfMerger
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-os.chdir(os.path.dirname(__file__))
 
 
 PROBLEM_HEADER_NEW_PAGE = r"""\newpage
@@ -41,7 +40,7 @@ def generate_cover_page_include(standards: list[str]):
     with open("standards.csv", "r") as f:
         std_text = {std[0]:std[1] for std in csv.reader(f, delimiter=",")}
     
-    cover_page_tex = "\\\\ \hline\n".join(map(get_row, standards))
+    cover_page_tex = "\\\\ \\hline\n".join(map(get_row, standards))
 
     return cover_page_tex
 
@@ -157,7 +156,8 @@ def generate_student_quizzes_tex(quizzes_csv, clean_up=True, precalc_sections=[]
 # Quiz Title: Math 160, QUIZ_TITLE
 QUIZ_TITLE = r"Mod 7 Bonus Assessment Spring 2024"
 # You can also change the location of the problem bank and the output destination here
-PROBLEM_BANK = "problembank/FA23/"
+# this is given to the latex compiler and so the everything should use / and not windows \
+PROBLEM_BANK = "C:\\Users\\jorqu\\OneDrive - Colostate\\160SP24\\Unit 2 - Modules 5 to 8\\Module 7 Derivative Shortcuts\\zzzdrafts\\Mod7Reassessment\\problembank\\SP24\\".replace("\\","/")
 OUTPUT_DIR = "output/"
 
 #### STEP 1 (Optional ish) ####
@@ -180,9 +180,10 @@ precalc_forms=[("006", "Ross Flaxman", r"whenever", "50 min")]
 # Or if you did not rename your csv file as in step 1 you can run
     # Python create_quiz.py your_csv_file.csv
 
-
-students_file = sys.argv[1] if len(sys.argv) > 1 else "students.csv"
-generate_student_quizzes_tex(students_file, clean_up=True, precalc_sections=precalc_forms)
+if __name__ == '__main__': 
+    os.chdir(os.path.dirname(__file__))
+    students_file = sys.argv[1] if len(sys.argv) > 1 else "students.csv"
+    generate_student_quizzes_tex(students_file, clean_up=True, precalc_sections=precalc_forms)
 
 # Do after Bonus because i dont want to break things
 # TODO: make this read in students as pandas array, so it can take in csv and things can be nice

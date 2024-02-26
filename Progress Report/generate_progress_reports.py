@@ -5,7 +5,7 @@ import glob
 import math
 os.chdir(os.path.dirname(__file__))
 
-OUTPUT_DIR = "output/"
+OUTPUT_DIR = "C:\\Users\\jorqu\\OneDrive - Colostate\\160SP24\\Syllabus and Grading\\Grade Reports\\"
 
 canvas_roster = r"../canvas_roster.csv"
 
@@ -34,8 +34,8 @@ def read_n_combine(rubrics_dir):
     #combined_df = pd.DataFrame(columns=["Student Name","Student ID"]+STANDARDS)
     combined_dict = {}
     
-    canvas_df = pd.read_csv(open(canvas_roster, 'rb'), usecols=["Student SIS ID", "Section Name"])
-    canvas_id_dict = {row["Student SIS ID"]: row["Section Name"] for _, row in canvas_df.iterrows()}
+    canvas_df = pd.read_csv(open(canvas_roster, 'rb'), usecols=["Student SIS ID", "Section Name", "Email"])
+    canvas_id_dict = {row["Student SIS ID"]: (row["Section Name"], row["Email"]) for _, row in canvas_df.iterrows()}
 
     # structure here is {student name + student id: {standard: count}}
     for r in rubrics:
@@ -47,7 +47,8 @@ def read_n_combine(rubrics_dir):
             posted_score = row["Posted Score"]
             if (row["Student Name"], int(row["Student ID"])) not in combined_dict.keys():  # and combined_df['Student ID'] == row['Student ID']) & (df['B'] == 3)).any():
                 combined_dict[(row["Student Name"], int(row["Student ID"]))]= {standard:0 for standard in STANDARDS}
-                combined_dict[(row["Student Name"], int(row["Student ID"]))]["Section"]=canvas_id_dict[int(row["Student ID"])]
+                combined_dict[(row["Student Name"], int(row["Student ID"]))]["Section"]=canvas_id_dict[int(row["Student ID"])][0]
+                combined_dict[(row["Student Name"], int(row["Student ID"]))]["Email"]=canvas_id_dict[int(row["Student ID"])][1]
             for standard_key in stds_assessed:
                 standard = standard_key.split(": ")[-1]
                 # idk do a check with posted score or something
@@ -60,16 +61,18 @@ def read_n_combine(rubrics_dir):
         if id == "123456789":
             continue
         else:
-            rubric_totals.append([student, int(id)] + [combined_dict[(student, id)]["Section"]] + [combined_dict[(student, id)][std] for std in STANDARDS])
+            rubric_totals.append([student, int(id)] + 
+                                 [combined_dict[(student, id)]["Section"], combined_dict[(student, id)]["Email"]] + 
+                                 [combined_dict[(student, id)][std] for std in STANDARDS])
         
-    the_dframe = pd.DataFrame(rubric_totals, columns=["Student Name", "Student ID", "Section"]+STANDARDS)
+    the_dframe = pd.DataFrame(rubric_totals, columns=["Student Name", "Student ID", "Section", "Email"]+STANDARDS)
     return the_dframe
 
 
 def from_combine_get_completed_stds(combined_df):
     totals_arr = []
     for _, row in combined_df.iterrows():
-        student_info = [row["Student Name"], row["Student ID"], row["Section"]]
+        student_info = [row["Student Name"], row["Student ID"], row["Section"], row["Email"]]
         offset = len(student_info)
         completed_stds = student_info+[0]*len(STANDARDS)
         for ind, standard in enumerate(STANDARDS):
@@ -78,7 +81,7 @@ def from_combine_get_completed_stds(combined_df):
             else:
                 completed_stds[ind+offset] = 0
         totals_arr.append(completed_stds)
-    the_dframe = pd.DataFrame(totals_arr, columns=["Student Name", "Student ID", "Section"]+STANDARDS)
+    the_dframe = pd.DataFrame(totals_arr, columns=["Student Name", "Student ID", "Section", "Email"]+STANDARDS)
     return the_dframe
             
 

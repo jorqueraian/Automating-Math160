@@ -20,12 +20,17 @@ MAKEUP_QUIZ_EXCEL_SHEET = r"Unit2"
 ### AS of now the program does not care about the name of the pdf file just the folder that pdf is in.
 ### and as long as the folder is something similar to "Mod 1 Quiz" then everything will work. Really
 ### the only thing that matters is the order of words. For example "Quiz Mod 1" would be bad. 
+### This also work for reassessments or Bonus quizzes just give the name of the directory the bonus 
+### quizzes are in: for example "..../Mod7Reassessment/Mod7ReassessQuiz" if that directory contains
+### the directories that the bonus quiz create_quiz.py file would output
 QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizDALT.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 2 Continuity Limits\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf"
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 6 Interpreting Derivatives\102 Mod 6 Quizzes\Mod6quizAlternate2SP24.pdf",
+    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/zzzdrafts/Mod7Reassessment/Mod7ReassessQuiz"
 ]
 
 
@@ -103,7 +108,7 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
             # Remove .pdf or what ever
             # Make lowercase and remove whitespace
             # remove _ or -
-            return re.sub(r'^\d+', '', str(input_str).split('\\')[path_ind].split('.')[0].lower()).strip().replace('_', '').replace('-', '').replace(',', '').replace(' ', '').replace("quizzes","quiz").replace("module","mod")
+            return re.sub(r'^\d+', '', re.split(r"[\\\/]", str(input_str))[path_ind].split('.')[0].lower()).strip().replace('_', '').replace('-', '').replace(',', '').replace(' ', '').replace("quizzes","quiz").replace("module","mod")
         # This is over kill and entirely unneeded. Its also so funny that the clean_quiz function will probably make it so there is a perfect matching every time! and the string alignment is 1000% overkill. But at this point im keeping it as is
         quizfile_names = [clean_str(qfile, -2) for qfile in QUIZZES_LOCATIONS]
         best_match = None
@@ -136,19 +141,34 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
         if makeup_quiz is None:
             print(f'Could Not match {makeups_to_print["Quiz"][ind]} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
             print('This quiz was skipped. To ignore this and go with best match anyway please set match_threshold=None\n')
-        else:
-            merger = PdfMerger()
+            continue
+        elif makeup_quiz[-3:] != "pdf":
+            import sys
+            sys.path.insert(-1, r'../Bonus Quizzes')
+            import create_quiz
+            sys.path.remove(r'../Bonus Quizzes')
+            section_dir = str(makeups_to_print["Section"][ind]) if str(makeups_to_print["Section"][ind])[0:2] == "00" else "00" + str(makeups_to_print["Section"][ind])
+            how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], section_dir, [])
+            makeup_quiz = f"{makeup_quiz}/{section_dir}/{how_to_not_code.file_name('pdf')}"
+            if not os.path.isfile(makeup_quiz):
+                # would be cool to run create_quiz.py if needed. maybe if comment was the standards needed
+                print(f'Could Not match {makeups_to_print["Quiz"][ind]} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
+                print(f"Quiz file not found: {makeup_quiz}")
+                print('This quiz was skipped.\n')
+                continue
 
-            merger.append(open(precalc_form, 'rb'))
-            merger.append(open("blank.pdf", 'rb'))  # this is super hacky but idc
-            merger.append(open(makeup_quiz, 'rb'))
-            merger.write(f'{OUTPUT_DIR}{makeups_to_print["Student Name"][ind]}-{makeups_to_print["Instructor Name"][ind]}-{quiz_name}.pdf')
-            merger.close()
+        merger = PdfMerger()
 
-            print(f'{makeups_to_print["Student Name"][ind]} - {makeups_to_print["Instructor Name"][ind]} - {quiz_name}\n')
+        merger.append(open(precalc_form, 'rb'))
+        merger.append(open("blank.pdf", 'rb'))  # this is super hacky but idc
+        merger.append(open(makeup_quiz, 'rb'))
+        merger.write(f'{OUTPUT_DIR}{makeups_to_print["Student Name"][ind]}-{makeups_to_print["Instructor Name"][ind]}-{quiz_name}.pdf')
+        merger.close()
 
-            # clean file sys
-            os.remove(precalc_form)
+        print(f'{makeups_to_print["Student Name"][ind]} - {makeups_to_print["Instructor Name"][ind]} - {quiz_name}\n')
+
+        # clean file sys
+        os.remove(precalc_form)
 
 
 # for some reason if the makeup quizzes file is open when you run this things wont work. I have literally no idea why

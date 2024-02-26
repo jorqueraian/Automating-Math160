@@ -25,7 +25,8 @@ BIG_LOOK_UP_TABLE = {
     "Module 2: Quiz alts": {"alts": 4031746},
     "Module 3: Quiz": {"001":4025219, "003":4025034, "004": 4025220, "005":4025222, "008":4025234, "009":4025236, "006":4025276},
     "Module 4: Exam": {"all": 4065801, "sdc": 4082832, "alts": 4075164},
-    "Module 5: Quiz": {"001": 4111118, "003":4111017, "004":4111120, "005":4111123, "006":4111125, "008":4111128, "009":4111130, "alts":4111131}
+    "Module 5: Quiz": {"001": 4111118, "003":4111017, "004":4111120, "005":4111123, "006":4111125, "008":4111128, "009":4111130, "alts":4111131},
+    "Module 6: Quiz": {"001": 4146608, "003":4142956, "004":4146609, "005":4146610, "006":4146611, "008":4146612, "009":4146613, "alts":4150548},
 }
 
 ################# THE GRADESCOPE API ##############
@@ -73,9 +74,9 @@ def get_standard_rubric_key(standard="", grade=None):
 ###################### RUNNING THIS SCRIPT #################
 # Assignment Name to get evals for. This should match the name in
 # BIG_LOOK_UP_TABLE made at the top
-ASSIGNMENT_NAME = "Module 5: Quiz"
+ASSIGNMENT_NAME = "Module 6: Quiz"
 # leave empty to do all sections, or ["001"] do only do section 001
-SECTIONS = ["003","006"]  # need to rerun when ross and hilary are done
+SECTIONS = []  
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!
