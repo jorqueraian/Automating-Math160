@@ -157,8 +157,8 @@ def generate_student_quizzes_tex(quizzes_csv, clean_up=True, precalc_sections=[]
 QUIZ_TITLE = r"Mod 7 Bonus Assessment Spring 2024"
 # You can also change the location of the problem bank and the output destination here
 # this is given to the latex compiler and so the everything should use / and not windows \
-PROBLEM_BANK = "C:\\Users\\jorqu\\OneDrive - Colostate\\160SP24\\Unit 2 - Modules 5 to 8\\Module 7 Derivative Shortcuts\\zzzdrafts\\Mod7Reassessment\\problembank\\SP24\\".replace("\\","/")
-OUTPUT_DIR = "output/"
+PROBLEM_BANK = "C:\\Users\\jorqu\\OneDrive - Colostate\\160SP24\\Unit 2 - Modules 5 to 8\\Module 7 Derivative Shortcuts\\Mod7Reassessment\\problembank\\SP24\\".replace("\\","/")
+OUTPUT_DIR = "C:\\Users\\jorqu\\OneDrive - Colostate\\160SP24\\Unit 2 - Modules 5 to 8\Module 7 Derivative Shortcuts\\Mod7Reassessment\\ReassessmentQuizzes\\".replace("\\","/") #"output/"
 
 #### STEP 1 (Optional ish) ####
 # Create a file named students.csv in the same directory as this file
@@ -189,3 +189,4 @@ if __name__ == '__main__':
 # TODO: make this read in students as pandas array, so it can take in csv and things can be nice
 #       I would like it so there is a single column for standards selected
 # TODO: make precalc thing better. make step 1.5 not in the python file maybe?
+# if i mistakenly compile the template things break. so be warned

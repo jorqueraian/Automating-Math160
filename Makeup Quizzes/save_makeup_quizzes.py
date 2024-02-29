@@ -122,7 +122,7 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
                 best_match = (ind, cost_per_char)
         if best_match is not None:
             # print(clean_str(QUIZZES_LOCATIONS[best_match[0]],-2))
-            print(best_match)
+            print(best_match[0]+1, best_match[1])
             return QUIZZES_LOCATIONS[best_match[0]], clean_str(QUIZZES_LOCATIONS[best_match[0]],-2)
         else:
             return None, None
