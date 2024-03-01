@@ -10,7 +10,7 @@ from reportlab.lib.pagesizes import letter
 
 PROBLEM_HEADER_NEW_PAGE = r"""\newpage
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l l}
-    \textbf{Name}:\;\;<<student name>> & \textbf{Section}:\;\;<<section number>>\hspace{2in}\\
+    \textbf{Name}:\;\;<<student name>> & \textbf{Instructor}:\;\;<<section number>>\hspace{2in}\\
     \end{tabular*} \\"""
 
 
@@ -18,10 +18,13 @@ class Student:
     def __init__(self, name: str, section: str, standards: list[str]):
         self.name = name
         self.section = section
-        self.standards = standards
+        self.standards = list(set(standards))
     
-    def file_name(self, ext):
-        return f"quiz-{self.section}-{self.name.replace(' ', '-')}.{ext}"
+    def file_name(self, ext, include_section=False):
+        if include_section:
+            return f"quiz-{self.section}-{self.name.replace(' ', '-')}.{ext}"
+        else:
+            return f"quiz-{self.name.replace(' ', '-')}.{ext}"
 
 
 def create_problems_include(standards: list[str]):
@@ -157,8 +160,8 @@ def generate_student_quizzes_tex(quizzes_csv, clean_up=True, precalc_sections=[]
 QUIZ_TITLE = r"Mod 7 Bonus Assessment Spring 2024"
 # You can also change the location of the problem bank and the output destination here
 # this is given to the latex compiler and so the everything should use / and not windows \
-PROBLEM_BANK = "C:\\Users\\jorqu\\OneDrive - Colostate\\160SP24\\Unit 2 - Modules 5 to 8\\Module 7 Derivative Shortcuts\\Mod7Reassessment\\problembank\\SP24\\".replace("\\","/")
-OUTPUT_DIR = "C:\\Users\\jorqu\\OneDrive - Colostate\\160SP24\\Unit 2 - Modules 5 to 8\Module 7 Derivative Shortcuts\\Mod7Reassessment\\ReassessmentQuizzes\\".replace("\\","/") #"output/"
+PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/problembank/SP24/".replace("\\","/")
+OUTPUT_DIR = "output/" #"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes/".replace("\\","/") #"output/"
 
 #### STEP 1 (Optional ish) ####
 # Create a file named students.csv in the same directory as this file
@@ -171,7 +174,7 @@ OUTPUT_DIR = "C:\\Users\\jorqu\\OneDrive - Colostate\\160SP24\\Unit 2 - Modules 
 # attached
 # Add a tuple for each section into the array. 
 # Ex ("<Section number ex 006>", "Ross Flaxman", r"12/8", "50 min")
-precalc_forms=[("006", "Ross Flaxman", r"whenever", "50 min")]
+precalc_forms=[]#[("006", "Ross Flaxman", r"whenever", "50 min")]
 
 #### Step 2 ####
 # Run this file with the following command or click "play" is VS code

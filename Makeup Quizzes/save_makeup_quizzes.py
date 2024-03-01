@@ -5,6 +5,7 @@ import io
 import re
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+import glob
 os.chdir(os.path.dirname(__file__))
 
 OUTPUT_DIR = "output/"
@@ -30,7 +31,7 @@ QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 6 Interpreting Derivatives\102 Mod 6 Quizzes\Mod6quizAlternate2SP24.pdf",
-    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/zzzdrafts/Mod7Reassessment/Mod7ReassessQuiz"
+    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes"
 ]
 
 
@@ -147,16 +148,35 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
             sys.path.insert(-1, r'../Bonus Quizzes')
             import create_quiz
             sys.path.remove(r'../Bonus Quizzes')
-            section_dir = "0"*(max(0,3-len(str(makeups_to_print["Section"][ind])))) + str(makeups_to_print["Section"][ind])
-            how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], section_dir, [])
-            makeup_quiz = f"{makeup_quiz}/{section_dir}/{how_to_not_code.file_name('pdf')}"
-            if not os.path.isfile(makeup_quiz):
+
+            # TODO: Make this use string similarity algo
+            section_str = "0"*(max(0,3-len(str(makeups_to_print["Section"][ind])))) + str(makeups_to_print["Section"][ind])
+            
+            best_match = None
+            for sec_dir in glob.glob(f"{makeup_quiz}/*/"):
+                sec_dir_name = re.split(r"[\\\/]", sec_dir)[-2]
+                # TODO: Make this use string similarity algo, unless the section str is in the directory name
+                if section_str in sec_dir_name:
+                    how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], sec_dir_name, [])
+                    makeup_quiz = f"{sec_dir}/{how_to_not_code.file_name('pdf')}"
+                    continue
+                else:
+                    cost = cost_of_alignment(re.sub(r'^\d+ *(noon)* *', '', sec_dir_name), makeups_to_print["Instructor Name"][ind], 1, 1, 1) # may want to adjust these
+                    cost_per_char = cost / (len(re.sub(r'^\d+ *', '', sec_dir_name))+len(makeups_to_print["Instructor Name"][ind]))  # and these
+                    if (best_match is None) or (cost_per_char < best_match[1]):
+                        best_match = (sec_dir, cost_per_char)
+            
+            if best_match is not None:
+                how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], re.split(r"[\\\/]", best_match[0])[-2], [])
+                makeup_quiz = f"{best_match[0]}/{how_to_not_code.file_name('pdf')}"
+            
+            if best_match is None or not os.path.isfile(makeup_quiz):
                 # would be cool to run create_quiz.py if needed. maybe if comment was the standards needed
                 print(f'Could Not match {makeups_to_print["Quiz"][ind]} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
                 print(f"Quiz file not found: {makeup_quiz}")
                 print('This quiz was skipped.\n')
                 continue
-
+        
         merger = PdfMerger()
 
         merger.append(open(precalc_form, 'rb'))
