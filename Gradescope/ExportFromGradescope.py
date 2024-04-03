@@ -106,6 +106,8 @@ def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, s
         for student in evals:  # skip test student
             if student["SID"] == "123456789":
                 continue
+            elif student["SID"] == "":
+                print("\nYikes, it appears that not all the quizzes were matched to a student. Please check gradescope to unlock this mystery student!\n")
             else:
                 rubric_scores.append([canvas_id_dict[int(student["SID"])], student["SID"]] + 
                                         [student["rubric score"][std] for std in assignment_stds])

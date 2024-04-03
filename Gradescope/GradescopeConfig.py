@@ -27,6 +27,11 @@ BIG_LOOK_UP_TABLE = {
     "Module 4: Exam": {"all": 4065801, "sdc": 4082832, "alts": 4075164},
     "Module 5: Quiz": {"001": 4111118, "003":4111017, "004":4111120, "005":4111123, "006":4111125, "008":4111128, "009":4111130, "alts":4111131},
     "Module 6: Quiz": {"001": 4146608, "003":4142956, "004":4146609, "005":4146610, "006":4146611, "008":4146612, "009":4146613, "alts":4150548},
+    "Module 7: Quiz": {"001": 4146634, "003":4178767, "004":4178772, "005":4178773, "006":4178786, "008":4178775, "009":4178776},
+    "Module 8: Exam": {"all": 4186348},
+    "Module 9: Quiz": {"001": 4258688, "003":4258769, "004":4258771, "005":4258790, "006":4258795, "008":4258800, "009":4258803, "alts":4283270},
+    "Module 10: Quiz": {"001": 4283525, "003":4283581, "004":4283583, "005":4283587, "006":4283591, "008":4283593, "009":4283594, "alts":4307877},
+
 }
 
 ################# THE GRADESCOPE API ##############
@@ -74,9 +79,9 @@ def get_standard_rubric_key(standard="", grade=None):
 ###################### RUNNING THIS SCRIPT #################
 # Assignment Name to get evals for. This should match the name in
 # BIG_LOOK_UP_TABLE made at the top
-ASSIGNMENT_NAME = "Module 6: Quiz"
+ASSIGNMENT_NAME = "Module 10: Quiz"
 # leave empty to do all sections, or ["001"] do only do section 001
-SECTIONS = ["006", "alts"] # ive run ["001","003","008","009"]  and ["005"]
+SECTIONS = ["alts"] # DONE mod 9 ALL BUT 4,6. all but 4 and 6 for Mod 10
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!

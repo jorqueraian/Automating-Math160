@@ -157,11 +157,11 @@ def generate_student_quizzes_tex(quizzes_csv, clean_up=True, precalc_sections=[]
 #### STEP 0.5 ####
 # Modify standards.csv to change teh description of standards. And check it has what you need
 # Quiz Title: Math 160, QUIZ_TITLE
-QUIZ_TITLE = r"Mod 7 Bonus Assessment Spring 2024"
+QUIZ_TITLE = r"Mod 11 Reassessment Quiz Spring 2024"
 # You can also change the location of the problem bank and the output destination here
 # this is given to the latex compiler and so the everything should use / and not windows \
-PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/problembank/SP24/".replace("\\","/")
-OUTPUT_DIR = "output/" #"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes/".replace("\\","/") #"output/"
+PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/zzzdrafts/Mod11Reassessment/problembank/FA23/".replace("\\","/")
+OUTPUT_DIR = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/zzzdrafts/Mod11Reassessment/ReassessmentQuizzes/".replace("\\","/") #"output/"
 
 #### STEP 1 (Optional ish) ####
 # Create a file named students.csv in the same directory as this file
@@ -185,7 +185,7 @@ precalc_forms=[]#[("006", "Ross Flaxman", r"whenever", "50 min")]
 
 if __name__ == '__main__': 
     os.chdir(os.path.dirname(__file__))
-    students_file = sys.argv[1] if len(sys.argv) > 1 else "students.csv"
+    students_file = sys.argv[1] if len(sys.argv) > 1 else "students.csv"#"students.csv"
     generate_student_quizzes_tex(students_file, clean_up=True, precalc_sections=precalc_forms)
 
 # Do after Bonus because i dont want to break things

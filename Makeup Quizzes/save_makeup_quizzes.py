@@ -14,7 +14,7 @@ from StringSimilarity import cost_of_alignment
 
 
 MAKEUP_QUIZ_EXCEL = r"C:\Users\jorqu\OneDrive - Colostate\160SP24\SharedMeetingsUploads\Makeup-Quizzes.xlsx" 
-MAKEUP_QUIZ_EXCEL_SHEET = r"Unit2"
+MAKEUP_QUIZ_EXCEL_SHEET = r"Unit3"
 #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Makeup-Quizzes.xlsx"
 
 
@@ -31,7 +31,10 @@ QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 6 Interpreting Derivatives\102 Mod 6 Quizzes\Mod6quizAlternate2SP24.pdf",
-    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes"
+    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes",
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 9 Linearization and Theorems\Module 9 Quizzes\Mod9quizAlternate.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 10 Optimization\Module 10 Quizzes\Mod10quizMondayAndAlt.pdf"
 ]
 
 
@@ -109,7 +112,7 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
             # Remove .pdf or what ever
             # Make lowercase and remove whitespace
             # remove _ or -
-            return re.sub(r'^\d+', '', re.split(r"[\\\/]", str(input_str))[path_ind].split('.')[0].lower()).strip().replace('_', '').replace('-', '').replace(',', '').replace(' ', '').replace("quizzes","quiz").replace("module","mod")
+            return re.sub(r'^\d+', '', re.split(r"[\\\/]", str(input_str))[path_ind].split('.')[0].lower()).strip().replace('_', '').replace('-', '').replace(',', '').replace(' ', '').replace("quizzes","quiz").replace("module","mod").replace("versions","")
         # This is over kill and entirely unneeded. Its also so funny that the clean_quiz function will probably make it so there is a perfect matching every time! and the string alignment is 1000% overkill. But at this point im keeping it as is
         quizfile_names = [clean_str(qfile, -2) for qfile in QUIZZES_LOCATIONS]
         best_match = None
@@ -140,7 +143,7 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
         makeup_quiz, quiz_name = parse_quiz(makeups_to_print["Quiz"][ind])
         
         if makeup_quiz is None:
-            print(f'Could Not match {makeups_to_print["Quiz"][ind]} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
+            print(f'Could Not match {'\033[1m'}{makeups_to_print["Quiz"][ind]}{'\033[0m'} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
             print('This quiz was skipped. To ignore this and go with best match anyway please set match_threshold=None\n')
             continue
         elif makeup_quiz[-3:] != "pdf":
