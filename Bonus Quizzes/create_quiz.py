@@ -18,7 +18,7 @@ class Student:
     def __init__(self, name: str, section: str, standards: list[str]):
         self.name = name
         self.section = section
-        self.standards = list(set(standards))
+        self.standards = list(dict.fromkeys(standards))  #Hacky but what ever
     
     def file_name(self, ext, include_section=False):
         if include_section:
@@ -38,7 +38,7 @@ def create_problems_include(standards: list[str]):
 
 def generate_cover_page_include(standards: list[str]):
     def get_row(standard):
-        return f"{standard}: {std_text[standard]} & Q\\ref{{std:{standard}}} & S MN NY NG"
+        return f"{standard}: {std_text[standard]} & Q\\ref{{std:{standard}}} & S MR NY NG"
     
     with open("standards.csv", "r") as f:
         std_text = {std[0]:std[1] for std in csv.reader(f, delimiter=",")}
@@ -160,8 +160,8 @@ def generate_student_quizzes_tex(quizzes_csv, clean_up=True, precalc_sections=[]
 QUIZ_TITLE = r"Mod 11 Reassessment Quiz Spring 2024"
 # You can also change the location of the problem bank and the output destination here
 # this is given to the latex compiler and so the everything should use / and not windows \
-PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/zzzdrafts/Mod11Reassessment/problembank/FA23/".replace("\\","/")
-OUTPUT_DIR = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/zzzdrafts/Mod11Reassessment/ReassessmentQuizzes/".replace("\\","/") #"output/"
+PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/problembank/SP24/".replace("\\","/")
+OUTPUT_DIR = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/ReassessmentQuizzes/".replace("\\","/") #"output/"
 
 #### STEP 1 (Optional ish) ####
 # Create a file named students.csv in the same directory as this file
@@ -177,6 +177,8 @@ OUTPUT_DIR = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 
 precalc_forms=[]#[("006", "Ross Flaxman", r"whenever", "50 min")]
 
 #### Step 2 ####
+#student_csv_file = "Module 11 Reassessment Quiz SP24.csv" #"students.csv"
+student_csv_file = "students.csv"
 # Run this file with the following command or click "play" is VS code
 # (Note this was written in python 3.11 so you may need to updated to at least that version)
     # Python create_quiz.py
@@ -185,7 +187,7 @@ precalc_forms=[]#[("006", "Ross Flaxman", r"whenever", "50 min")]
 
 if __name__ == '__main__': 
     os.chdir(os.path.dirname(__file__))
-    students_file = sys.argv[1] if len(sys.argv) > 1 else "students.csv"#"students.csv"
+    students_file = sys.argv[1] if len(sys.argv) > 1 else student_csv_file
     generate_student_quizzes_tex(students_file, clean_up=True, precalc_sections=precalc_forms)
 
 # Do after Bonus because i dont want to break things

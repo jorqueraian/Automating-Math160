@@ -34,7 +34,8 @@ QUIZZES_LOCATIONS = [
     r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 9 Linearization and Theorems\Module 9 Quizzes\Mod9quizAlternate.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 10 Optimization\Module 10 Quizzes\Mod10quizMondayAndAlt.pdf"
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 10 Optimization\Module 10 Quizzes\Mod10quizMondayAndAlt.pdf",
+    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/ReassessmentQuizzes"
 ]
 
 
@@ -81,7 +82,7 @@ def generate_precalc_form(student_name, instructor_name, exam_date, exam_len, ca
     return "tempprecalc.pdf"
 
 
-def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None):
+def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None, default_quiz_override=None):
     def get_date_interval(date_input=""):
         from datetime import date, timedelta
         date_given = pd.to_datetime(str(date_input).replace(',', ' '), errors='coerce')
@@ -152,7 +153,7 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
             import create_quiz
             sys.path.remove(r'../Bonus Quizzes')
 
-            # TODO: Make this use string similarity algo
+            # TODO: Make this use string similarity algo, but also maybe done, too mu
             section_str = "0"*(max(0,3-len(str(makeups_to_print["Section"][ind])))) + str(makeups_to_print["Section"][ind])
             
             best_match = None
@@ -164,6 +165,7 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
                     makeup_quiz = f"{sec_dir}/{how_to_not_code.file_name('pdf')}"
                     continue
                 else:
+                    # Im using the string similarity to find the directory to look in?
                     cost = cost_of_alignment(re.sub(r'^\d+ *(noon)* *', '', sec_dir_name), makeups_to_print["Instructor Name"][ind], 1, 1, 1) # may want to adjust these
                     cost_per_char = cost / (len(re.sub(r'^\d+ *', '', sec_dir_name))+len(makeups_to_print["Instructor Name"][ind]))  # and these
                     if (best_match is None) or (cost_per_char < best_match[1]):
@@ -175,10 +177,14 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
             
             if best_match is None or not os.path.isfile(makeup_quiz):
                 # would be cool to run create_quiz.py if needed. maybe if comment was the standards needed
-                print(f'Could Not match {makeups_to_print["Quiz"][ind]} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
+                print(f'Could Not match {'\033[1m'}{makeups_to_print["Quiz"][ind]}{'\033[0m'} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
                 print(f"Quiz file not found: {makeup_quiz}")
-                print('This quiz was skipped.\n')
-                continue
+                if default_quiz_override is not None:
+                    print("Using provided default_quiz_override")
+                    makeup_quiz = default_quiz_override
+                else:
+                    print('This quiz was skipped. Trying setting default_quiz_override to something \n')
+                    continue
         
         merger = PdfMerger()
 
@@ -194,5 +200,6 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None)
         os.remove(precalc_form)
 
 
+default_quiz_override=r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 11 Derivative Applications\Mod11Reassessment\ReassessmentQuizzes\Entire Quiz\Entire Quiz - Mod 11 Reassessment.pdf"
 # for some reason if the makeup quizzes file is open when you run this things wont work. I have literally no idea why
-get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEET, match_threshold=0.025)
+get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEET, match_threshold=0.025, default_quiz_override=default_quiz_override)

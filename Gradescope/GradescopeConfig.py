@@ -81,7 +81,7 @@ def get_standard_rubric_key(standard="", grade=None):
 # BIG_LOOK_UP_TABLE made at the top
 ASSIGNMENT_NAME = "Module 10: Quiz"
 # leave empty to do all sections, or ["001"] do only do section 001
-SECTIONS = ["alts"] # DONE mod 9 ALL BUT 4,6. all but 4 and 6 for Mod 10
+SECTIONS = ["006"] # DONE mod 9 ALL BUT 4,6. all but 4 for Mod 10
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!
