@@ -14,11 +14,17 @@ PROBLEM_HEADER_NEW_PAGE = r"""\newpage
     \end{tabular*} \\"""
 
 
+def sort_order(a: str):
+        char_vals = {"L":100,"D":200,"I":300,"T":400}
+        return char_vals.get(a[0],0)+int(a[1:])
+
+
 class Student:
     def __init__(self, name: str, section: str, standards: list[str]):
         self.name = name
-        self.section = section
-        self.standards = list(dict.fromkeys(standards))  #Hacky but what ever
+        self.section = section.replace(':',' ')
+        self.standards = sorted(list(set(standards)), key=lambda val: sort_order(val)) #old: list(dict.fromkeys(standards))
+
     
     def file_name(self, ext, include_section=False):
         if include_section:
@@ -157,11 +163,13 @@ def generate_student_quizzes_tex(quizzes_csv, clean_up=True, precalc_sections=[]
 #### STEP 0.5 ####
 # Modify standards.csv to change teh description of standards. And check it has what you need
 # Quiz Title: Math 160, QUIZ_TITLE
-QUIZ_TITLE = r"Mod 11 Reassessment Quiz Spring 2024"
+QUIZ_TITLE = r"Mod 14 Reassessment Quiz Spring 2024"
 # You can also change the location of the problem bank and the output destination here
 # this is given to the latex compiler and so the everything should use / and not windows \
-PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/problembank/SP24/".replace("\\","/")
-OUTPUT_DIR = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/ReassessmentQuizzes/".replace("\\","/") #"output/"
+#PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/problembank/SP24/".replace("\\","/")
+PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 4 - Modules 13 to 15/Module 14 Antiderivatives/Module 14 Reassessment/problembank/SP24/"
+#OUTPUT_DIR = "output/" #"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/ReassessmentQuizzes/".replace("\\","/")
+OUTPUT_DIR = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 4 - Modules 13 to 15/Module 14 Antiderivatives/Module 14 Reassessment/ReassessmentQuizzes/"
 
 #### STEP 1 (Optional ish) ####
 # Create a file named students.csv in the same directory as this file
@@ -174,11 +182,11 @@ OUTPUT_DIR = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 
 # attached
 # Add a tuple for each section into the array. 
 # Ex ("<Section number ex 006>", "Ross Flaxman", r"12/8", "50 min")
-precalc_forms=[]#[("006", "Ross Flaxman", r"whenever", "50 min")]
+precalc_forms=[] #[("FRF", "Math 160 Team", r"4/19", "30 min")]
 
 #### Step 2 ####
-#student_csv_file = "Module 11 Reassessment Quiz SP24.csv" #"students.csv"
-student_csv_file = "students.csv"
+student_csv_file = "Module 14 Reassessment SP24.csv"
+#student_csv_file = "Module 13 Bonus Reassessment SP24.csv"
 # Run this file with the following command or click "play" is VS code
 # (Note this was written in python 3.11 so you may need to updated to at least that version)
     # Python create_quiz.py

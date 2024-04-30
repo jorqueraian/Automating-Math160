@@ -14,7 +14,7 @@ from StringSimilarity import cost_of_alignment
 
 
 MAKEUP_QUIZ_EXCEL = r"C:\Users\jorqu\OneDrive - Colostate\160SP24\SharedMeetingsUploads\Makeup-Quizzes.xlsx" 
-MAKEUP_QUIZ_EXCEL_SHEET = r"Unit3"
+MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Unit2",r"Unit3",r"Unit4", r"Ross special students"]
 #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Makeup-Quizzes.xlsx"
 
 
@@ -35,7 +35,10 @@ QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 9 Linearization and Theorems\Module 9 Quizzes\Mod9quizAlternate.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 10 Optimization\Module 10 Quizzes\Mod10quizMondayAndAlt.pdf",
-    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/ReassessmentQuizzes"
+    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/ReassessmentQuizzes",
+    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 12 Introduction to Integrals\zzzdrafts\Mod 12 Exam\Mod 12 Ver B SP24 GSTemplage.pdf",
+    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 4 - Modules 13 to 15/Module 13 FToC/Mod 13 Quizzes/Mod13quizMondayAlt.pdf",
+    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 4 - Modules 13 to 15/Module 14 Antiderivatives/Module 14 Reassessment/ReassessmentQuizzes"
 ]
 
 
@@ -82,7 +85,7 @@ def generate_precalc_form(student_name, instructor_name, exam_date, exam_len, ca
     return "tempprecalc.pdf"
 
 
-def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None, default_quiz_override=None):
+def get_makeup_files_to_print(excelfile, excel_sheets, match_threshold=None, default_quiz_override=None):
     def get_date_interval(date_input=""):
         from datetime import date, timedelta
         date_given = pd.to_datetime(str(date_input).replace(',', ' '), errors='coerce')
@@ -133,73 +136,76 @@ def get_makeup_files_to_print(excelfile, excel_sheet_name, match_threshold=None,
             return None, None
     
     # TODO: read this https://stackoverflow.com/questions/26521266/using-pandas-to-pd-read-excel-for-multiple-worksheets-of-the-same-workbook
-    makeups_df = pd.read_excel(open(excelfile, 'rb'), sheet_name=excel_sheet_name, skiprows=[0,1])
-    makeups_to_print = makeups_df[makeups_df["Printed"] != True]
-    
-    for ind in makeups_to_print.index:
-        precalc_form = generate_precalc_form(makeups_to_print["Student Name"][ind],
-                              makeups_to_print["Instructor Name"][ind],
-                              get_date_interval(makeups_to_print["Date"][ind]), makeups_to_print["Time limit"][ind],
-                              parse_calculator(makeups_to_print["Calculator"][ind]), "nan")
-        makeup_quiz, quiz_name = parse_quiz(makeups_to_print["Quiz"][ind])
+    # for loop here for each excel sheet?
+    for excel_sheet_name in excel_sheets:
+        makeups_df = pd.read_excel(open(excelfile, 'rb'), sheet_name=excel_sheet_name, skiprows=[0,1])
+        makeups_to_print = makeups_df[makeups_df["Printed"] != True]
+        # TODO: check name column too and make sure its not empty or something
         
-        if makeup_quiz is None:
-            print(f'Could Not match {'\033[1m'}{makeups_to_print["Quiz"][ind]}{'\033[0m'} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
-            print('This quiz was skipped. To ignore this and go with best match anyway please set match_threshold=None\n')
-            continue
-        elif makeup_quiz[-3:] != "pdf":
-            import sys
-            sys.path.insert(-1, r'../Bonus Quizzes')
-            import create_quiz
-            sys.path.remove(r'../Bonus Quizzes')
-
-            # TODO: Make this use string similarity algo, but also maybe done, too mu
-            section_str = "0"*(max(0,3-len(str(makeups_to_print["Section"][ind])))) + str(makeups_to_print["Section"][ind])
+        for ind in makeups_to_print.index:
+            precalc_form = generate_precalc_form(makeups_to_print["Student Name"][ind],
+                                makeups_to_print["Instructor Name"][ind],
+                                get_date_interval(makeups_to_print["Date"][ind]), makeups_to_print["Time limit"][ind],
+                                parse_calculator(makeups_to_print["Calculator"][ind]), "nan")
+            makeup_quiz, quiz_name = parse_quiz(makeups_to_print["Quiz"][ind])
             
-            best_match = None
-            for sec_dir in glob.glob(f"{makeup_quiz}/*/"):
-                sec_dir_name = re.split(r"[\\\/]", sec_dir)[-2]
-                # TODO: Make this use string similarity algo, unless the section str is in the directory name
-                if section_str in sec_dir_name:
-                    how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], sec_dir_name, [])
-                    makeup_quiz = f"{sec_dir}/{how_to_not_code.file_name('pdf')}"
-                    continue
-                else:
-                    # Im using the string similarity to find the directory to look in?
-                    cost = cost_of_alignment(re.sub(r'^\d+ *(noon)* *', '', sec_dir_name), makeups_to_print["Instructor Name"][ind], 1, 1, 1) # may want to adjust these
-                    cost_per_char = cost / (len(re.sub(r'^\d+ *', '', sec_dir_name))+len(makeups_to_print["Instructor Name"][ind]))  # and these
-                    if (best_match is None) or (cost_per_char < best_match[1]):
-                        best_match = (sec_dir, cost_per_char)
-            
-            if best_match is not None:
-                how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], re.split(r"[\\\/]", best_match[0])[-2], [])
-                makeup_quiz = f"{best_match[0]}/{how_to_not_code.file_name('pdf')}"
-            
-            if best_match is None or not os.path.isfile(makeup_quiz):
-                # would be cool to run create_quiz.py if needed. maybe if comment was the standards needed
+            if makeup_quiz is None:
                 print(f'Could Not match {'\033[1m'}{makeups_to_print["Quiz"][ind]}{'\033[0m'} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
-                print(f"Quiz file not found: {makeup_quiz}")
-                if default_quiz_override is not None:
-                    print("Using provided default_quiz_override")
-                    makeup_quiz = default_quiz_override
-                else:
-                    print('This quiz was skipped. Trying setting default_quiz_override to something \n')
-                    continue
-        
-        merger = PdfMerger()
+                print('This quiz was skipped. To ignore this and go with best match anyway please set match_threshold=None\n')
+                continue
+            elif makeup_quiz[-3:] != "pdf":
+                import sys
+                sys.path.insert(-1, r'../Bonus Quizzes')
+                import create_quiz
+                sys.path.remove(r'../Bonus Quizzes')
 
-        merger.append(open(precalc_form, 'rb'))
-        merger.append(open("blank.pdf", 'rb'))  # this is super hacky but idc
-        merger.append(open(makeup_quiz, 'rb'))
-        merger.write(f'{OUTPUT_DIR}{makeups_to_print["Student Name"][ind]}-{makeups_to_print["Instructor Name"][ind]}-{quiz_name}.pdf')
-        merger.close()
+                # TODO: Make this use string similarity algo, but also maybe dont, too mu
+                section_str = "0"*(max(0,3-len(str(makeups_to_print["Section"][ind])))) + str(makeups_to_print["Section"][ind])
+                
+                best_match = None
+                for sec_dir in glob.glob(f"{makeup_quiz}/*/"):
+                    sec_dir_name = re.split(r"[\\\/]", sec_dir)[-2]
+                    # TODO: Make this use string similarity algo, unless the section str is in the directory name
+                    if section_str in sec_dir_name:
+                        how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], sec_dir_name, [])
+                        makeup_quiz = f"{sec_dir}/{how_to_not_code.file_name('pdf')}"
+                        continue
+                    else:
+                        # Im using the string similarity to find the directory to look in?
+                        cost = cost_of_alignment(re.sub(r'^\d+ *(noon)* *', '', sec_dir_name), makeups_to_print["Instructor Name"][ind], 1, 1, 1) # may want to adjust these
+                        cost_per_char = cost / (len(re.sub(r'^\d+ *', '', sec_dir_name))+len(makeups_to_print["Instructor Name"][ind]))  # and these
+                        if (best_match is None) or (cost_per_char < best_match[1]):
+                            best_match = (sec_dir, cost_per_char)
+                
+                if best_match is not None:
+                    how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], re.split(r"[\\\/]", best_match[0])[-2], [])
+                    makeup_quiz = f"{best_match[0]}/{how_to_not_code.file_name('pdf')}"
+                
+                if best_match is None or not os.path.isfile(makeup_quiz):
+                    # would be cool to run create_quiz.py if needed. maybe if comment was the standards needed
+                    print(f'Could Not match {'\033[1m'}{makeups_to_print["Quiz"][ind]}{'\033[0m'} to a known quiz for student: {makeups_to_print["Student Name"][ind]} and instructor: {makeups_to_print["Instructor Name"][ind]}')
+                    print(f"Quiz file not found: {makeup_quiz}")
+                    if default_quiz_override is not None:
+                        print("Using provided default_quiz_override")
+                        makeup_quiz = default_quiz_override
+                    else:
+                        print('This quiz was skipped. Trying setting default_quiz_override to something \n')
+                        continue
+            
+            merger = PdfMerger()
 
-        print(f'{makeups_to_print["Student Name"][ind]} - {makeups_to_print["Instructor Name"][ind]} - {quiz_name}\n')
+            merger.append(open(precalc_form, 'rb'))
+            merger.append(open("blank.pdf", 'rb'))  # this is super hacky but idc
+            merger.append(open(makeup_quiz, 'rb'))
+            merger.write(f'{OUTPUT_DIR}{makeups_to_print["Student Name"][ind]}-{makeups_to_print["Instructor Name"][ind]}-{quiz_name}.pdf')
+            merger.close()
 
-        # clean file sys
-        os.remove(precalc_form)
+            print(f'{makeups_to_print["Student Name"][ind]} - {makeups_to_print["Instructor Name"][ind]} - {quiz_name}\n')
+
+            # clean file sys
+            os.remove(precalc_form)
 
 
-default_quiz_override=r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 11 Derivative Applications\Mod11Reassessment\ReassessmentQuizzes\Entire Quiz\Entire Quiz - Mod 11 Reassessment.pdf"
+default_quiz_override=r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 4 - Modules 13 to 15\Module 14 Antiderivatives\Module 14 Reassessment\ReassessmentQuizzes\Entire Quiz\quiz-Entire-Quiz.pdf" #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 11 Derivative Applications\Mod11Reassessment\ReassessmentQuizzes\Entire Quiz\Entire Quiz - Mod 11 Reassessment.pdf"
 # for some reason if the makeup quizzes file is open when you run this things wont work. I have literally no idea why
-get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEET, match_threshold=0.025, default_quiz_override=default_quiz_override)
+get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEETS, match_threshold=0.025, default_quiz_override=default_quiz_override)
