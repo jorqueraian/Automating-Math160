@@ -25,20 +25,21 @@ MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Unit2",r"Unit3",r"Unit4", r"Ross special 
 ### quizzes are in: for example "..../Mod7Reassessment/Mod7ReassessQuiz" if that directory contains
 ### the directories that the bonus quiz create_quiz.py file would output
 QUIZZES_LOCATIONS = [
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizDALT.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 2 Continuity Limits\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 6 Interpreting Derivatives\102 Mod 6 Quizzes\Mod6quizAlternate2SP24.pdf",
-    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 9 Linearization and Theorems\Module 9 Quizzes\Mod9quizAlternate.pdf",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 10 Optimization\Module 10 Quizzes\Mod10quizMondayAndAlt.pdf",
-    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/ReassessmentQuizzes",
-    r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 12 Introduction to Integrals\zzzdrafts\Mod 12 Exam\Mod 12 Ver B SP24 GSTemplage.pdf",
-    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 4 - Modules 13 to 15/Module 13 FToC/Mod 13 Quizzes/Mod13quizMondayAlt.pdf",
-    r"C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 4 - Modules 13 to 15/Module 14 Antiderivatives/Module 14 Reassessment/ReassessmentQuizzes"
+    r"..\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizDALT.pdf",
+    r"..\Unit 1 - Modules 1 to 4\Module 2 Continuity Limits\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
+    r"..\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
+    r"..\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf",
+    r"..\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf",
+    r"..\Unit 2 - Modules 5 to 8\Module 6 Interpreting Derivatives\102 Mod 6 Quizzes\Mod6quizAlternate2SP24.pdf",
+    r"../Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes",
+    r"..\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
+    r"..\Unit 3 - Modules 9 to 12\Module 9 Linearization and Theorems\Module 9 Quizzes\Mod9quizAlternate.pdf",
+    r"..\Unit 3 - Modules 9 to 12\Module 10 Optimization\Module 10 Quizzes\Mod10quizMondayAndAlt.pdf",
+    r"../Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/ReassessmentQuizzes",
+    r"..\Unit 3 - Modules 9 to 12\Module 12 Introduction to Integrals\zzzdrafts\Mod 12 Exam\Mod 12 Ver B SP24 GSTemplage.pdf",
+    r"../Unit 4 - Modules 13 to 15/Module 13 FToC/Mod 13 Quizzes/Mod13quizMondayAlt.pdf",
+    r"../Unit 4 - Modules 13 to 15/Module 14 Antiderivatives/Module 14 Reassessment/ReassessmentQuizzes",
+    r"..\Unit 4 - Modules 13 to 15\Module 15 Construction and Substitution\Mod 15 Quiz\Mod15QuizVerPreCalc.pdf"
 ]
 
 
