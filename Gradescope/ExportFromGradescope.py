@@ -79,10 +79,10 @@ def add_rubric_scores(grades_and_evals):
                 student["rubric score"][standard] = score.split(" (")[0]  # can do just score.
 
 
-def save_assignment_to_csv(assignment_name, canvas_df):
+def save_assignment_to_csv(assignment_name, canvas_df, sections):
     from datetime import date
     today = date.today()
-    canvas_df.to_csv(f"{OUTPUT_DIR}{assignment_name.replace(':', '').replace(' ', '-')}-results-{today.strftime('%m-%d')}-{"-".join(SECTIONS)}.csv", index=False)
+    canvas_df.to_csv(f"{OUTPUT_DIR}{assignment_name.replace(':', '').replace(' ', '-')}-results-{today.strftime('%m-%d')}-{"-".join(sections)}.csv", index=False)
 
 
 def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, sections_keys=[], canvas_usable=True, canvas_roster=None):
@@ -96,7 +96,7 @@ def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, s
         evals += [eval for eval in evals_ver if eval["Status"] == "Graded"]
     add_rubric_scores(evals)
 
-    if canvas_usable and canvas_roster is not None:
+    if canvas_usable and canvas_roster is not None and len(evals) > 0:
         canvas_df = pd.read_csv(open(canvas_roster, 'rb'), usecols=["Student Name", "Student SIS ID"])
         canvas_id_dict = {row["Student SIS ID"]: row["Student Name"] for _, row in canvas_df.iterrows()}
         assignment_stds = list(evals[ 0]["rubric score"].keys())
@@ -107,17 +107,19 @@ def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, s
             if student["SID"] == "123456789":
                 continue
             elif student["SID"] == "":
-                print("\nYikes, it appears that not all the quizzes were matched to a student. Please check gradescope to unlock this mystery student!\n")
+                print("\nYikes, it appears that a quiz was not matched to a student. Please check gradescope to unlock this mystery student!\n")
             else:
-                rubric_scores.append([canvas_id_dict[int(student["SID"])], student["SID"]] + 
-                                        [student["rubric score"][std] for std in assignment_stds])
-        
+                if int(student["SID"]) in canvas_id_dict:
+                    rubric_scores.append([canvas_id_dict[int(student["SID"])], student["SID"]] + 
+                                            [student["rubric score"][std] for std in assignment_stds])
+                else:
+                    print(f"\nStudent {student['First Name']} {student['Last Name']}(SID: {student['SID']}) not found in Canvas Roster. Skipping")
         the_frame = pd.DataFrame(rubric_scores, columns=columns)
         return the_frame
     else:
         return evals
 
-
+# probably wont work lol
 def get_gradescope_data_for_assignment(course_num, assignment_num, canvas_usable=True, canvas_roster=None):
     evals = gradescope.get_assignment_evaluations(course_num, assignment_num)
     evals = [eval for eval in evals if eval["Status"] != "Missing"]
@@ -141,8 +143,21 @@ def get_gradescope_data_for_assignment(course_num, assignment_num, canvas_usable
     else:
         return evals
 
+if ONE_FILE_EACH:
+    if len(SECTIONS) == 0:
+        SECTIONS = list(BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME].keys())
 
-evals = get_gradescope_data_for_versd_assignment(GRADESCOPE_COURSE_NUMBER, 
-                                                BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME], SECTIONS, 
-                                                True, CANVAS_ROSTER)
-save_assignment_to_csv(ASSIGNMENT_NAME, evals)
+    for section in SECTIONS:
+        evals = get_gradescope_data_for_versd_assignment(GRADESCOPE_COURSE_NUMBER, 
+                                                        BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME], [section], 
+                                                        True, CANVAS_ROSTER)
+        print(f"{len(evals)} students exported for section {section}")
+        if len(evals) > 0:
+            save_assignment_to_csv(ASSIGNMENT_NAME, evals, [section])
+else:
+    evals = get_gradescope_data_for_versd_assignment(GRADESCOPE_COURSE_NUMBER, 
+                                                    BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME], SECTIONS, 
+                                                    True, CANVAS_ROSTER)
+    print(f"{len(evals)} students exported for sections: {SECTIONS}")
+    if len(evals) > 0:
+        save_assignment_to_csv(ASSIGNMENT_NAME, evals, SECTIONS)

@@ -13,8 +13,8 @@ OUTPUT_DIR = "output/"
 from StringSimilarity import cost_of_alignment
 
 
-MAKEUP_QUIZ_EXCEL = r"C:\Users\jorqu\OneDrive - Colostate\160SP24\SharedMeetingsUploads\Makeup-Quizzes.xlsx" 
-MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Unit2",r"Unit3",r"Unit4", r"Ross special students"]
+MAKEUP_QUIZ_EXCEL = r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Shared Files\Makeup-Quizzes.xlsx" 
+MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Unit2",r"Unit3",r"Unit4"]
 #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Makeup-Quizzes.xlsx"
 
 
@@ -25,8 +25,8 @@ MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Unit2",r"Unit3",r"Unit4", r"Ross special 
 ### quizzes are in: for example "..../Mod7Reassessment/Mod7ReassessQuiz" if that directory contains
 ### the directories that the bonus quiz create_quiz.py file would output
 QUIZZES_LOCATIONS = [
-    r"..\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizDALT.pdf",
-    r"..\Unit 1 - Modules 1 to 4\Module 2 Continuity Limits\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizzAlternate.pdf",
+    #r"..\Unit 1 - Modules 1 to 4\Module 2 Continuity Limits\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
     r"..\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
     r"..\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf",
     r"..\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf",
