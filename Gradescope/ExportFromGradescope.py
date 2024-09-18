@@ -56,7 +56,7 @@ def add_rubric_scores_old(grades_and_evals):
                 student["rubric score"][standard] = score.split(" (")[0]
 
 
-def add_rubric_scores(grades_and_evals):
+def add_rubric_scores(grades_and_evals, email_str=None):
     for student in grades_and_evals:
         student["rubric score"] = {}  # add new dictionary key for scores
         for key in list(student["questions"].keys()):
@@ -75,7 +75,10 @@ def add_rubric_scores(grades_and_evals):
                         score = rub_score.value
                         rubric_with_data += 1
                 if rubric_with_data != 1:
-                    print(f"Student: {student['First Name']+ ' '+ student['Last Name']}(Section: {student['Sections'].split('-')[-1]}), Standard:{standard} has {rubric_with_data} rubric scores selected")
+                    if email_str is not None:
+                        email_str.append(f"Student: {student['First Name']+ ' '+ student['Last Name']}(Section: {student['Sections'].split('-')[-1]}), Standard:{standard} has {rubric_with_data} rubric scores selected")
+                    else:
+                        print(f"Student: {student['First Name']+ ' '+ student['Last Name']}(Section: {student['Sections'].split('-')[-1]}), Standard:{standard} has {rubric_with_data} rubric scores selected")
                 student["rubric score"][standard] = score.split(" (")[0]  # can do just score.
 
 
@@ -85,7 +88,7 @@ def save_assignment_to_csv(assignment_name, canvas_df, sections):
     canvas_df.to_csv(f"{OUTPUT_DIR}{assignment_name.replace(':', '').replace(' ', '-')}-results-{today.strftime('%m-%d')}-{"-".join(sections)}.csv", index=False)
 
 
-def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, sections_keys=[], canvas_usable=True, canvas_roster=None):
+def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, sections_keys=[], canvas_usable=True, canvas_roster=None, email_str=None):
     evals = []
     
     if len(sections_keys) == 0:
@@ -94,7 +97,7 @@ def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, s
     for assignment_num_key in sections_keys:
         evals_ver = gradescope.get_assignment_evaluations(course_num, assignment_nums_dict[assignment_num_key])
         evals += [eval for eval in evals_ver if eval["Status"] == "Graded"]
-    add_rubric_scores(evals)
+    add_rubric_scores(evals, email_str)
 
     if canvas_usable and canvas_roster is not None and len(evals) > 0:
         canvas_df = pd.read_csv(open(canvas_roster, 'rb'), usecols=["Student Name", "Student SIS ID"])
@@ -143,6 +146,11 @@ def get_gradescope_data_for_assignment(course_num, assignment_num, canvas_usable
     else:
         return evals
 
+if DRAFT_EMAILS:
+    email_str = []
+else:
+    email_str = None
+
 if ONE_FILE_EACH:
     if len(SECTIONS) == 0:
         SECTIONS = list(BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME].keys())
@@ -150,14 +158,27 @@ if ONE_FILE_EACH:
     for section in SECTIONS:
         evals = get_gradescope_data_for_versd_assignment(GRADESCOPE_COURSE_NUMBER, 
                                                         BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME], [section], 
-                                                        True, CANVAS_ROSTER)
+                                                        True, CANVAS_ROSTER,
+                                                        email_str)
         print(f"{len(evals)} students exported for section {section}")
         if len(evals) > 0:
             save_assignment_to_csv(ASSIGNMENT_NAME, evals, [section])
 else:
     evals = get_gradescope_data_for_versd_assignment(GRADESCOPE_COURSE_NUMBER, 
                                                     BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME], SECTIONS, 
-                                                    True, CANVAS_ROSTER)
+                                                    True, CANVAS_ROSTER,
+                                                    email_str)
     print(f"{len(evals)} students exported for sections: {SECTIONS}")
     if len(evals) > 0:
         save_assignment_to_csv(ASSIGNMENT_NAME, evals, SECTIONS)
+
+if DRAFT_EMAILS:
+    for section in list(BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME].keys()):
+        print_str = ""
+        for student_str in email_str:
+            if bool(re.search(r'\d'+f'{section[1:]}', student_str)):
+                print_str += student_str + "\n"
+
+        if len(print_str) > 0:
+            print("""\nHey,\nWhen running my code to extract the rubric score from gradescope, my code found the following mistakes. Can you fix them in gradescope.\n\n""" + print_str + """\nIf you can update the rubric scores for these students before the coordinator meeting on Tuesday that would be great. If you can't, just let me know when you update them so I can publish the most up to date scores to canvas.\n\nThanks,\nIan Jorquera\n\n\n""")
+        

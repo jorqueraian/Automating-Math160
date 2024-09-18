@@ -26,20 +26,14 @@ MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Unit2",r"Unit3",r"Unit4"]
 ### the directories that the bonus quiz create_quiz.py file would output
 QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizzAlternate.pdf",
-    #r"..\Unit 1 - Modules 1 to 4\Module 2 Continuity Limits\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
-    r"..\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
-    r"..\Unit 1 - Modules 1 to 4\Module 4 IndeterminateAROC\Mod4Exam\Mod4ExamVersionAlt.pdf",
-    r"..\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf",
-    r"..\Unit 2 - Modules 5 to 8\Module 6 Interpreting Derivatives\102 Mod 6 Quizzes\Mod6quizAlternate2SP24.pdf",
-    r"../Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes",
-    r"..\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
-    r"..\Unit 3 - Modules 9 to 12\Module 9 Linearization and Theorems\Module 9 Quizzes\Mod9quizAlternate.pdf",
-    r"..\Unit 3 - Modules 9 to 12\Module 10 Optimization\Module 10 Quizzes\Mod10quizMondayAndAlt.pdf",
-    r"../Unit 3 - Modules 9 to 12/Module 11 Derivative Applications/Mod11Reassessment/ReassessmentQuizzes",
-    r"..\Unit 3 - Modules 9 to 12\Module 12 Introduction to Integrals\zzzdrafts\Mod 12 Exam\Mod 12 Ver B SP24 GSTemplage.pdf",
-    r"../Unit 4 - Modules 13 to 15/Module 13 FToC/Mod 13 Quizzes/Mod13quizMondayAlt.pdf",
-    r"../Unit 4 - Modules 13 to 15/Module 14 Antiderivatives/Module 14 Reassessment/ReassessmentQuizzes",
-    r"..\Unit 4 - Modules 13 to 15\Module 15 Construction and Substitution\Mod 15 Quiz\Mod15QuizVerPreCalc.pdf"
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 1 - Modules 1 to 4\Module 2 LimitsContinuity\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 1 - Modules 1 to 4\Module 2 LimitsContinuity\103 Module 2 Reassessment\Quiz Module 2 Reasssess L1.pdf",
+    #r"..\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 1 - Modules 1 to 4\Module 4 InfinityAROC\Mod4Exam\Mod4ExamVersionB.pdf",
+    #r"..\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf",
+    #r"..\Unit 2 - Modules 5 to 8\Module 6 Interpreting Derivatives\102 Mod 6 Quizzes\Mod6quizAlternate2SP24.pdf",
+    #r"../Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes",
+    #r"..\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
 ]
 
 
@@ -98,7 +92,7 @@ def get_makeup_files_to_print(excelfile, excel_sheets, match_threshold=None, def
         return f"{start_date.strftime('%m/%d')} - {end_date.strftime('%m/%d')}"
     def parse_calculator(option_str):
         # This is over kill and entirely unneeded
-        if len(option_str) == 0:
+        if isinstance(option_str, float) or len(str(option_str)) == 0:
             return "Non-Graphing"
         options = ["Graphing","Non-Graphing","None","Yes"]
         best_match = None
@@ -209,4 +203,4 @@ def get_makeup_files_to_print(excelfile, excel_sheets, match_threshold=None, def
 
 default_quiz_override=r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 4 - Modules 13 to 15\Module 14 Antiderivatives\Module 14 Reassessment\ReassessmentQuizzes\Entire Quiz\quiz-Entire-Quiz.pdf" #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 11 Derivative Applications\Mod11Reassessment\ReassessmentQuizzes\Entire Quiz\Entire Quiz - Mod 11 Reassessment.pdf"
 # for some reason if the makeup quizzes file is open when you run this things wont work. I have literally no idea why
-get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEETS, match_threshold=0.025, default_quiz_override=default_quiz_override)
+get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEETS, match_threshold=0.04, default_quiz_override=default_quiz_override)

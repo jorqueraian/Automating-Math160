@@ -5,25 +5,25 @@ import glob
 import math
 os.chdir(os.path.dirname(__file__))
 
-OUTPUT_DIR = "C:\\Users\\jorqu\\OneDrive - Colostate\\160SP24\\Syllabus and Grading\\Grade Reports\\"
+OUTPUT_DIR = "C:\\Users\\jorqu\\OneDrive - Colostate\\160FA24\\Syllabus and Grading\\Grade Reports\\"
 
 canvas_roster = r"../canvas_roster.csv"
 
 # maybe make dict to have number of times needed to get mastery
 # Maybe save this to file and load in. FOr now i Wont touc
-STANDARDS_dict = {"T1":3,"T2":3,
-             "L1":3,"L2":2,"L3":3,"L4":3,"L5":3,"L6":2,"L7":2,
-             "D1":2,"D2":2,"D3":3,"D4":3,"D5":2,"D6":2,"D7":3,"D8":3,"D9":3,"D10":2,"D11":3,
-             "I1":2,"I2":2,"I3":2,"I4":2,"I5":2,"I6":1,"I7":1,"I8":2}
+STANDARDS_dict = {
+    "S1":3,"S2":3, "S3":2, "S4":2, "S5":2,
+    "L1":2,"L2":3,"L3":3,"L4":2,
+    #"D1":2,"D2":2,"D3":3,"D4":3,"D5":2,"D6":2,"D7":3,"D8":3,"D9":3,"D10":2,"D11":3,
+    #"I1":2,"I2":2,"I3":2,"I4":2,"I5":2,"I6":1,"I7":1,"I8":2
+}
 
 
 
 from enum import Enum
 class RubricScore(Enum):
     Satisfactory = "Satisfactory"
-    RevisionNeeded = "Minor Revision"
     NotYet = "Not Yet"
-    NotGradable = "Not gradable"
 
 STANDARDS = list(STANDARDS_dict.keys())
 
@@ -44,7 +44,10 @@ def read_n_combine(rubrics_dir):
         for _, row in rubric_df.iterrows():
             if row["Student Name"] == "Test Student":
                 continue
-            posted_score = row["Posted Score"]
+            if "Posted Score" in row:
+                posted_score = row["Posted Score"]
+            else:
+                posted_score = 0
             if (row["Student Name"], int(row["Student ID"])) not in combined_dict.keys():  # and combined_df['Student ID'] == row['Student ID']) & (df['B'] == 3)).any():
                 combined_dict[(row["Student Name"], int(row["Student ID"]))]= {standard:0 for standard in STANDARDS}
                 combined_dict[(row["Student Name"], int(row["Student ID"]))]["Section"]=canvas_id_dict[int(row["Student ID"])][0]
