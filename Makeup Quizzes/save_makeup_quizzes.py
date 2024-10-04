@@ -14,7 +14,7 @@ from StringSimilarity import cost_of_alignment
 
 
 MAKEUP_QUIZ_EXCEL = r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Shared Files\Makeup-Quizzes.xlsx" 
-MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Unit2",r"Unit3",r"Unit4"]
+MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Mod 5-7"]
 #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Makeup-Quizzes.xlsx"
 
 
@@ -28,10 +28,10 @@ QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 1 - Modules 1 to 4\Module 1 Intro2Limits\102 Mod1Quiz\Mod1QuizzAlternate.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 1 - Modules 1 to 4\Module 2 LimitsContinuity\102 Module 2 Quizzes\Quiz Module 2Alt1.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 1 - Modules 1 to 4\Module 2 LimitsContinuity\103 Module 2 Reassessment\Quiz Module 2 Reasssess L1.pdf",
-    #r"..\Unit 1 - Modules 1 to 4\Module 3 OneSided Infinity\Mod3Reassessment\Mod3ReassessQuizA.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 1 - Modules 1 to 4\Module 4 InfinityAROC\Mod4Exam\Mod4ExamVersionB.pdf",
-    #r"..\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\Mod 5 Quiz\Quiz Module 5 C6pmALT.pdf",
-    #r"..\Unit 2 - Modules 5 to 8\Module 6 Interpreting Derivatives\102 Mod 6 Quizzes\Mod6quizAlternate2SP24.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 2 - Modules 5 to 8\Module 5 IntroToDerivatives\07 Mod 5 Quiz\Quiz Module 5 C Alt.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 2 - Modules 5 to 8\Module 6 Interpreting Derivatives\102 Mod 6 Quizzes\Mod6quizALT1.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 2 - Modules 5 to 8\Module 7 Derivative Shortcuts\102 Mod7ReassessQuiz\Mod7ReassessQuizA.pdf",
     #r"../Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes",
     #r"..\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
 ]
@@ -83,6 +83,8 @@ def generate_precalc_form(student_name, instructor_name, exam_date, exam_len, ca
 def get_makeup_files_to_print(excelfile, excel_sheets, match_threshold=None, default_quiz_override=None):
     def get_date_interval(date_input=""):
         from datetime import date, timedelta
+        if isinstance(date_input, str) and ("whenever" in date_input or "anytime" in date_input):
+            return date_input
         date_given = pd.to_datetime(str(date_input).replace(',', ' '), errors='coerce')
         if date_given == date_given:
             start_date = date_given
@@ -111,7 +113,10 @@ def get_makeup_files_to_print(excelfile, excel_sheets, match_threshold=None, def
             # Remove .pdf or what ever
             # Make lowercase and remove whitespace
             # remove _ or -
-            return re.sub(r'^\d+', '', re.split(r"[\\\/]", str(input_str))[path_ind].split('.')[0].lower()).strip().replace('_', '').replace('-', '').replace(',', '').replace(' ', '').replace("quizzes","quiz").replace("module","mod").replace("versions","")
+            return re.sub(r'^\d+', '', re.split(r"[\\\/]", str(input_str))[path_ind].split('.')[0].lower()).strip().replace('_', '').replace('-', '').replace(',', '').replace(' ', '').replace("zzes","z").replace("dule","d").replace("versions","").replace("sment","s").replace("quiz", "")
+            # this is the old clean_str incase new one is bad
+            #return re.sub(r'^\d+', '', re.split(r"[\\\/]", str(input_str))[path_ind].split('.')[0].lower()).strip().replace('_', '').replace('-', '').replace(',', '').replace(' ', '').replace("quizzes","quiz").replace("module","mod").replace("versions","").replace("reassessment","reassess").replace("reassessquiz", "reassess")
+        
         # This is over kill and entirely unneeded. Its also so funny that the clean_quiz function will probably make it so there is a perfect matching every time! and the string alignment is 1000% overkill. But at this point im keeping it as is
         quizfile_names = [clean_str(qfile, -2) for qfile in QUIZZES_LOCATIONS]
         best_match = None

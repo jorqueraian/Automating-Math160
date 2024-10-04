@@ -180,5 +180,5 @@ if DRAFT_EMAILS:
                 print_str += student_str + "\n"
 
         if len(print_str) > 0:
-            print("""\nHey,\nWhen running my code to extract the rubric score from gradescope, my code found the following mistakes. Can you fix them in gradescope.\n\n""" + print_str + """\nIf you can update the rubric scores for these students before the coordinator meeting on Tuesday that would be great. If you can't, just let me know when you update them so I can publish the most up to date scores to canvas.\n\nThanks,\nIan Jorquera\n\n\n""")
+            print("""\nHey,\nWhen running my code to extract the rubric score from gradescope for """ + ASSIGNMENT_NAME + """, my code found the following mistakes. Can you fix them in gradescope.\n\n""" + print_str + """\nIf you can update the rubric scores for these students before the coordinator meeting on Tuesday that would be great. If you can't, just let me know when you update them so I can publish the most up to date scores to canvas.\n\nThanks,\nIan Jorquera\n\n\n""")
         
