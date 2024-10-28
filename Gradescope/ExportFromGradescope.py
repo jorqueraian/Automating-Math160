@@ -67,6 +67,9 @@ def add_rubric_scores(grades_and_evals, email_str=None):
                     stds.append(rubric_score_item.split(" ")[0])
             stds = list(set(stds))
 
+            if len(stds) == 0:
+                print(f"Student: {student['First Name']+ ' '+ student['Last Name']}(Section: {student['Sections'].split('-')[-1]}), has no Rubric Score Group for problem {key}")
+                
             for standard in stds:
                 rubric_with_data =0
                 score = default_rubric_eval  # think about changing this. Its very bad if this is used
