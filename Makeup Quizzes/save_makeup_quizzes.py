@@ -34,6 +34,8 @@ QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 2 - Modules 5 to 8\Module 7 Derivative Shortcuts\102 Mod7ReassessQuiz\Mod7ReassessQuizA.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\102 Mod8ExamVersions\Mod 8 Ver B FA24.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 9 Linearization and Theorems\Module 9 Quizzes\Mod9quizALTernate.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 10 Optimization\Module 10 Quizzes\Mod10quizALT.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 11 Applied Optimization\Mod11Reassessment/ReassessmentQuizzes".replace("\\","/"),
     #r"../Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes",
     #r"..\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
 ]
@@ -178,7 +180,7 @@ def get_makeup_files_to_print(
                     sys.path.remove(r'../Bonus Quizzes')
 
                     # TODO: Make this use string similarity algo, but also maybe dont, too mu
-                    section_str = "0"*(max(0,3-len(str(makeups_to_print["Section"][ind])))) + str(makeups_to_print["Section"][ind])
+                    section_str = "0"*(max(0,3-len(str(int(makeups_to_print["Section"][ind]))))) + str(int(makeups_to_print["Section"][ind]))
                     
                     best_match = None
                     for sec_dir in glob.glob(f"{makeup_quiz}/*/"):
@@ -224,7 +226,7 @@ def get_makeup_files_to_print(
             os.remove(precalc_form)
 
 
-default_quiz_override=None #r"Downloads\Mod 8 Ver A FA24 with blanks.pdf"#r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 4 - Modules 13 to 15\Module 14 Antiderivatives\Module 14 Reassessment\ReassessmentQuizzes\Entire Quiz\quiz-Entire-Quiz.pdf" #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 11 Derivative Applications\Mod11Reassessment\ReassessmentQuizzes\Entire Quiz\Entire Quiz - Mod 11 Reassessment.pdf"
+default_quiz_override=r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 11 Applied Optimization\Mod11Reassessment\ReassessmentQuizzes\Entire Quiz\quiz-Full-Quiz.pdf" #r"Downloads\Mod 8 Ver A FA24 with blanks.pdf"#r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 4 - Modules 13 to 15\Module 14 Antiderivatives\Module 14 Reassessment\ReassessmentQuizzes\Entire Quiz\quiz-Entire-Quiz.pdf" #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 11 Derivative Applications\Mod11Reassessment\ReassessmentQuizzes\Entire Quiz\Entire Quiz - Mod 11 Reassessment.pdf"
 print_only_covers=False
 # for some reason if the makeup quizzes file is open when you run this things wont work. I have literally no idea why
-get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEETS, match_threshold=0.04, default_quiz_override=default_quiz_override, print_only_covers=print_only_covers)
+get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEETS, match_threshold=0.14, default_quiz_override=default_quiz_override, print_only_covers=print_only_covers)
