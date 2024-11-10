@@ -10,6 +10,8 @@ from GradescopeConfig import *
 import re
 import pandas as pd
 import os
+import bs4
+import json
 
 os.chdir(os.path.dirname(__file__))
 
@@ -98,6 +100,7 @@ def get_gradescope_data_for_versd_assignment(course_num, assignment_nums_dict, s
         sections_keys = list(assignment_nums_dict.keys())
 
     for assignment_num_key in sections_keys:
+        assert assignment_num_key in assignment_nums_dict, f"'{assignment_num_key}' not found. The known sections are: {assignment_nums_dict.keys()}"
         evals_ver = gradescope.get_assignment_evaluations(course_num, assignment_nums_dict[assignment_num_key])
         evals += [eval for eval in evals_ver if eval["Status"] == "Graded"]
     add_rubric_scores(evals, email_str)
@@ -149,6 +152,37 @@ def get_gradescope_data_for_assignment(course_num, assignment_num, canvas_usable
     else:
         return evals
 
+def get_all_assignments(abbrs={"Homework": "HW", "Mod ": "Module "}):
+    # NOTE: remove "/assignments" for only active assignments?
+    result = gradescope.api.request(endpoint="courses/{}/assignments".format(GRADESCOPE_COURSE_NUMBER))
+    soup = bs4.BeautifulSoup(result.content.decode(), features="html.parser")
+
+    assignments_table = json.loads(soup.find("div", attrs={"data-react-class":"AssignmentsTable"}).attrs['data-react-props'].replace("'", "\""))["table_data"]
+    
+    assignments = {}
+    for assignment in assignments_table:
+        if assignment['type'] == 'assignment': # Ignore the assignment groups
+            assign_match =re.match(r"Mod(?:ule)* ([0-9]*): ([A-z]+) *([Ss]ection)? *([0-9,a-z]*)", assignment['title'])
+            # group 1: module #
+            # group 2: Quiz/Exam/Reass etc
+            # group 3: "Section " or blank
+            # group 4: section # or "alts"
+            assert assign_match is not None, f"Assignment {assignment['title']} did not fit expected regex pattern: 'Module ([0-9]*): ([A-z])* (Section )*([0-9,a-z]*)'"
+            
+            assignment_group_name = assignment['title'][0:assign_match.regs[2][1]]
+            for word in abbrs.keys():
+                assignment_group_name = assignment_group_name.replace(word, abbrs[word])
+
+            #section_num = assign_match.group(4) if len(assign_match.group(4)) > 0 else "all"
+            if not assignment_group_name in assignments.keys():
+                assignments[assignment_group_name] = {assign_match.group(4): int(assignment['id'].split("_")[-1])}
+            else:
+                assignments[assignment_group_name][assign_match.group(4)] = int(assignment['id'].split("_")[-1])
+    return assignments
+
+if not bool(BIG_LOOK_UP_TABLE):
+    BIG_LOOK_UP_TABLE = get_all_assignments()
+
 if DRAFT_EMAILS:
     email_str = []
 else:
@@ -156,9 +190,11 @@ else:
 
 if ONE_FILE_EACH:
     if len(SECTIONS) == 0:
+        assert ASSIGNMENT_NAME in BIG_LOOK_UP_TABLE, f"{ASSIGNMENT_NAME} not found. The known assignments are: {BIG_LOOK_UP_TABLE.keys()}"
         SECTIONS = list(BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME].keys())
 
     for section in SECTIONS:
+        assert section in BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME], f"{ASSIGNMENT_NAME} not found. The known sections are: {BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME].keys()}"
         evals = get_gradescope_data_for_versd_assignment(GRADESCOPE_COURSE_NUMBER, 
                                                         BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME], [section], 
                                                         True, CANVAS_ROSTER,
