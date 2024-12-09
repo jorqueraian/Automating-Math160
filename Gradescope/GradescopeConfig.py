@@ -25,18 +25,8 @@ BIG_LOOK_UP_TABLE = {}
 #    "Module 2: Quiz": {"001": 4837596, "002": 4837660, "003":4837663, "004":4837665, "006":4837668, "008": 4837685, "009": 4837698, "010":4837710, "012": 4837713, "015": 4837714, "alts":4837716},
 #    "Module 3: HW":   {"001": 4884452, "002": 4884574, "003":4884573, "004":4884572, "006":4884571, "008": 4884569, "009": 4884568, "010":4884567, "012": 4884566, "015": 4884554},
 #    "Module 4: Exam": {"all":4945161, "alts": 4971542},
-#    "Module 5: Quiz": {"001": 4987891, "002": 4987992, "003":4987996, "004":4988010, "006":4988012, "008": 4988019, "009": 4988020, "010":4988022, "012": 4988023, "015": 4988024, "alts":4988036},
-#    "Module 6: Quiz": {"001": 5038305, "002": 5038433, "003":5038436, "004":5038437, "006":5038438, "008": 5038472, "009": 5038544, "010":5038473, "012": 5038480, "015": 5038482, "alts":5038502},
-#    "Module 7: HW":   {"001": 5078838, "002": 5079101, "003":5079102, "004":5079104, "006":5079105, "008": 5079106, "009": 5079108, "010":5079111, "012": 5079115, "015": 5079116},
 #    "Module 7: Reassessment": {"001": 5096429, "002": 5096498, "003":5096502, "006":5096505, "008": 5096506, "009": 5096509, "010":5096507},
-#    "Module 8: Exam": {"all":5136992, "alts": 5159488},
-#    "Module 9: Quiz": {"001":5178923, "002":5179004, "003":5179006, "004":5179007, "006":5179008, "008":5179015, "009":5179016, "010":5179017, "012":5179018, "015": 5179020, "alts":5179021},
-#    "Module 10: Quiz": {"001":5218364, "002":5218384, "003":5218385, "004":5218386, "006":5218387, "008":5218389, "009":5218390, "010":5218391, "012":5218392, "015": 5218393, "alts":5218394},
-#    "Module 11: HW":   {"001":5252491, "002":5252617, "003":5252619, "004":5252622, "006":5252624, "008":5252625, "009":5252627, "010":5252629, "012":5252631, "015": 5252632},
-#    "Module 12: Exam": {"all":5285282},
-#    "Module 13: Quiz": {},
-#    "Module 14: HW":   {},
-#    "Module 15: Quiz": {},
+# .....
 #}
 
 ################# THE GRADESCOPE API ##############
@@ -64,18 +54,12 @@ class RubricScore(Enum):
 
 default_rubric_eval = RubricScore.NotYet.value
 
-# This was only for Mod 1 Spring 2024. SO it should be deleted at some point
-class RubricScoreMod1(Enum):
-    Satisfactory = "Satisfactory (S)"
-    RevisionNeeded = "Minor Revision Needed (MR)"
-    NotYet = "Not Yet (NY)"
-    NotGradable = "Not Gradable (NG)"
-# Also old
-class RubricScore_old(Enum):
-    Satisfactory = "Satisfactory"
-    RevisionNeeded = "Minor Revision"
-    NotYet = "Not Yet"
-    NotGradable = "Not gradable"
+# Previously we had
+#class RubricScore(Enum):
+#    Satisfactory = "Satisfactory"
+#    RevisionNeeded = "Minor Revision"
+#    NotYet = "Not Yet"
+#    NotGradable = "Not gradable"
 
 # Change depending on how the gradescope rubric is set up
 # currently this is looking for a rubric group called "L2 Rubric Score"
@@ -89,15 +73,15 @@ def get_standard_rubric_key(standard="", grade=None):
 ###################### RUNNING THIS SCRIPT #################
 # Assignment Name to get evals for. This should match the name in
 # BIG_LOOK_UP_TABLE made at the top
-ASSIGNMENT_NAME = "Module 10: Quiz"
-# leave empty to do all sections, or ["001"] do only do section 001
+ASSIGNMENT_NAME = "Module 15: Quiz"
+# leave empty to do all sections, or ["001"] to only do section 001
 #SECTIONS = list(BIG_LOOK_UP_TABLE[ASSIGNMENT_NAME].keys())
 #SECTIONS.pop(SECTIONS.index("004"))
 #SECTIONS.pop(SECTIONS.index("001"))
-SECTIONS = ["alts"]# 
+SECTIONS = []
 
 ONE_FILE_EACH = False
-DRAFT_EMAILS = False
+DRAFT_EMAILS = True
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!

@@ -30,15 +30,7 @@ def try_extract_rubric_score(rubric_items, standard, grade):
             try: # try some spelling errors
                 return rubric_items[get_standard_rubric_key(standard, grade.value.replace("grad", "Grad"))]
             except KeyError:
-                try:
-                    return rubric_items[get_standard_rubric_key_old(standard, grade)]
-                except KeyError:
-                    raise KeyError(f"Failed in 'try_extract_rubric_score'\nFailed to get gradescope score for standard '{standard}' and score '{grade}'. Please check spelling and formatting in gradescope!")
-
-
-# DO NOT USE
-def get_standard_rubric_key_old(standard, grade): # possible point of failure. need the rubrics to be labeled in a very specific way!
-    return f"**{standard}**: Rubric Score: {RubricScoreMod1[grade.name].value}"
+                raise KeyError(f"Failed in 'try_extract_rubric_score'\nFailed to get gradescope score for standard '{standard}' and score '{grade}'. Please check spelling and formatting in gradescope!")
 
 
 def add_rubric_scores_old(grades_and_evals):

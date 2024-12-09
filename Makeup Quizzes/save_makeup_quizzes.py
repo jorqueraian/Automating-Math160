@@ -14,7 +14,7 @@ from StringSimilarity import cost_of_alignment
 
 
 MAKEUP_QUIZ_EXCEL = r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Shared Files\Makeup-Quizzes.xlsx" 
-MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Mod 5-7", r"Mod 8 Exam", r"Mod 9-11"]
+MAKEUP_QUIZ_EXCEL_SHEETS = [r"Unit1",r"Mod 5-7", r"Mod 8 Exam", r"Mod 9-11", r"Mod 12 Exam", r"Mod 13-15"]
 #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Makeup-Quizzes.xlsx"
 
 
@@ -36,8 +36,9 @@ QUIZZES_LOCATIONS = [
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 9 Linearization and Theorems\Module 9 Quizzes\Mod9quizALTernate.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 10 Optimization\Module 10 Quizzes\Mod10quizALT.pdf",
     r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 11 Applied Optimization\Mod11Reassessment/ReassessmentQuizzes".replace("\\","/"),
-    #r"../Unit 2 - Modules 5 to 8/Module 7 Derivative Shortcuts/Mod7Reassessment/ReassessmentQuizzes",
-    #r"..\Unit 2 - Modules 5 to 8\Module 8 Chain Rule and Implicit\zzzdrafts\102 Mod8ExamVersions\Mod 8 Ver B SP24.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 12 Introduction to Integrals\104 Mod 12 Exam\Mod 12 Ver B FA24.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 4 - Modules 13 to 15\Module 13 Integrals\202 Module 13 Quiz\Mod13quizBeforeNoon.pdf",
+    r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 4 - Modules 13 to 15\Module 14 Antiderivatives\Mod14Reassessment\ReassessmentQuizzes",
 ]
 
 
@@ -186,16 +187,18 @@ def get_makeup_files_to_print(
                     for sec_dir in glob.glob(f"{makeup_quiz}/*/"):
                         sec_dir_name = re.split(r"[\\\/]", sec_dir)[-2]
                         # TODO: Make this use string similarity algo, unless the section str is in the directory name
-                        if section_str in sec_dir_name:
+                        if section_str in sec_dir_name and False:
                             how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], sec_dir_name, [])
                             makeup_quiz = f"{sec_dir}/{how_to_not_code.file_name('pdf')}"
                             continue
                         else:
                             # Im using the string similarity to find the directory to look in?
                             cost = cost_of_alignment(re.sub(r'^\d+ *(noon)* *', '', sec_dir_name), makeups_to_print["Instructor Name"][ind], 1, 1, 1) # may want to adjust these
+                            cost2 = cost_of_alignment(sec_dir_name, makeups_to_print["Instructor Name"][ind], 1, 1, 1)
                             cost_per_char = cost / (len(re.sub(r'^\d+ *', '', sec_dir_name))+len(makeups_to_print["Instructor Name"][ind]))  # and these
-                            if (best_match is None) or (cost_per_char < best_match[1]):
-                                best_match = (sec_dir, cost_per_char)
+                            cost_per_char2 = cost2 / (len(sec_dir_name)+len(makeups_to_print["Instructor Name"][ind]))
+                            if (best_match is None) or (cost_per_char < best_match[1]) or (cost_per_char2 < best_match[1]):
+                                best_match = (sec_dir, min(cost_per_char, cost_per_char2))
                     
                     if best_match is not None:
                         how_to_not_code = create_quiz.Student(makeups_to_print["Student Name"][ind], re.split(r"[\\\/]", best_match[0])[-2], [])
@@ -226,7 +229,9 @@ def get_makeup_files_to_print(
             os.remove(precalc_form)
 
 
-default_quiz_override=r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 11 Applied Optimization\Mod11Reassessment\ReassessmentQuizzes\Entire Quiz\quiz-Full-Quiz.pdf" #r"Downloads\Mod 8 Ver A FA24 with blanks.pdf"#r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 4 - Modules 13 to 15\Module 14 Antiderivatives\Module 14 Reassessment\ReassessmentQuizzes\Entire Quiz\quiz-Entire-Quiz.pdf" #r"C:\Users\jorqu\OneDrive - Colostate\160SP24\Unit 3 - Modules 9 to 12\Module 11 Derivative Applications\Mod11Reassessment\ReassessmentQuizzes\Entire Quiz\Entire Quiz - Mod 11 Reassessment.pdf"
+# This is only used when matching reassessment quizzes
+default_quiz_override=r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 4 - Modules 13 to 15\Module 14 Antiderivatives\Mod14Reassessment\ReassessmentQuizzes\Entire Quiz\quiz-Full-Quiz.pdf"
+
 print_only_covers=False
 # for some reason if the makeup quizzes file is open when you run this things wont work. I have literally no idea why
-get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEETS, match_threshold=0.14, default_quiz_override=default_quiz_override, print_only_covers=print_only_covers)
+get_makeup_files_to_print(MAKEUP_QUIZ_EXCEL, MAKEUP_QUIZ_EXCEL_SHEETS, match_threshold=0.04, default_quiz_override=default_quiz_override, print_only_covers=print_only_covers)

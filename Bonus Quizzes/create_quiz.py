@@ -171,14 +171,14 @@ def generate_student_quizzes_tex(quizzes_csv, clean_up=True, precalc_sections=[]
 #### STEP 0.5 ####
 # Modify standards.csv to change teh description of standards. And check it has what you need
 # Quiz Title: Math 160, QUIZ_TITLE
-QUIZ_TITLE = r"Mod 11 Reassessment Quiz Fall 2024"
+QUIZ_TITLE = r"Mod 14 Reassessment Quiz Fall 2024"
 # You can also change the location of the problem bank and the output destination here
 # this is given to the latex compiler and so the everything should use / and not windows \
-PROBLEM_BANK = r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 11 Applied Optimization\Mod11Reassessment\problembank\FA24/".replace("\\","/")
+PROBLEM_BANK = r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 4 - Modules 13 to 15\Module 15 Differential Equations Area\Module 15 Reassessment\problembank\FA24/".replace("\\","/")
 #PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 4 - Modules 13 to 15/Module 14 Antiderivatives/Module 14 Reassessment/problembank/SP24/"
-OUTPUT_DIR = r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 3 - Modules 9 to 12\Module 11 Applied Optimization\Mod11Reassessment\ReassessmentQuizzes/".replace("\\","/")
+OUTPUT_DIR = r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 4 - Modules 13 to 15\Module 15 Differential Equations Area\Module 15 Reassessment\ReassessmentQuizzes/".replace("\\","/")
 
-# If blah blah
+# If the second thing the csv files has inputs of the form "3 Ian Jorquera"
 SPLIT_SECTION_STRINGS = True
 
 #### STEP 1 (Optional ish) ####
@@ -195,7 +195,7 @@ SPLIT_SECTION_STRINGS = True
 precalc_forms=[] #[("FRF", "Math 160 Team", r"4/19", "30 min")]
 
 #### Step 2 ####
-student_csv_file = "Module 11 Reassessment Quiz FA24.csv"#"Module 11 Reassessment FA24.csv"
+student_csv_file = "Module 15 Reassessment Quiz FA24.csv"#"Module 14 Reassessment Quiz FA24.csv"
 #student_csv_file = "Module 13 Bonus Reassessment SP24.csv"
 # Run this file with the following command or click "play" is VS code
 # (Note this was written in python 3.11 so you may need to updated to at least that version)
