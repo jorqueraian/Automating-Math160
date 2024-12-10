@@ -16,7 +16,7 @@ GRADESCOPE_COURSE_NUMBER = 823917
 CANVAS_ROSTER = "../canvas_roster.csv"
 
 ############## PUT ASSIGNMENT NUMBERS HERE AS FOLLOWS #############
-#### Leave blank if you want to auto detect assignments and section. BIG_LOOK_UP_TABLE will have the same format as below
+#### Leave blank or as {} if you want to auto detect assignments and sections. BIG_LOOK_UP_TABLE will have the same format as below
 ####    "Name of assignment" : [assignment ids for each version]
 ### assignment ids also come from url https://www.gradescope.com/courses/703259/assignments/3989512
 BIG_LOOK_UP_TABLE = {}
@@ -82,6 +82,8 @@ SECTIONS = []
 
 ONE_FILE_EACH = False
 DRAFT_EMAILS = True
+
+KEY_ABBREVIATIONS = {"Homework": "HW", "Mod ": "Module "}
 
 # Run the file ExportFromGradescope.py! or run this file. either will work
 # good luck!

@@ -178,7 +178,8 @@ PROBLEM_BANK = r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 4 - Modules 13
 #PROBLEM_BANK = "C:/Users/jorqu/OneDrive - Colostate/160SP24/Unit 4 - Modules 13 to 15/Module 14 Antiderivatives/Module 14 Reassessment/problembank/SP24/"
 OUTPUT_DIR = r"C:\Users\jorqu\OneDrive - Colostate\160FA24\Unit 4 - Modules 13 to 15\Module 15 Differential Equations Area\Module 15 Reassessment\ReassessmentQuizzes/".replace("\\","/")
 
-# If the second thing the csv files has inputs of the form "3 Ian Jorquera"
+# If the second thing the csv files has inputs of the form "3 Ian Jorquera" set this setting to True. 
+# If not it wont matter. If there are any bugs you can try to disable this
 SPLIT_SECTION_STRINGS = True
 
 #### STEP 1 (Optional ish) ####

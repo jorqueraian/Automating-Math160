@@ -144,7 +144,7 @@ def get_gradescope_data_for_assignment(course_num, assignment_num, canvas_usable
     else:
         return evals
 
-def get_all_assignments(abbrs={"Homework": "HW", "Mod ": "Module "}):
+def get_all_assignments(abbrs=KEY_ABBREVIATIONS):
     # NOTE: remove "/assignments" for only active assignments?
     result = gradescope.api.request(endpoint="courses/{}/assignments".format(GRADESCOPE_COURSE_NUMBER))
     soup = bs4.BeautifulSoup(result.content.decode(), features="html.parser")
